@@ -11,6 +11,6 @@ TODO:
 8. ◌◌◌◌◌ Alghorithm to prevent First-Click-Loose
 9. ◌◌◌◌◌ Alghorithm to prevent "multi 8" at field generation (optional)
 
-First approach
-Dificulty settings
+First approach, Dificulty settings
+
 ![image](https://github.com/user-attachments/assets/a5238e67-f7ca-4c59-a4a0-71afab9c47d3)
