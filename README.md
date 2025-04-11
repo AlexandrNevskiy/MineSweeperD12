@@ -11,7 +11,8 @@ TODO:
 8. ●●●●◌ Alghorithm to prevent First-Click-Loose
 9. ◌◌◌◌◌ Alghorithm to prevent "multi 8" at field generation (optional)
 
-2025-04-11
+---
+2025-04-10
 
 Mine field generation, gradient grid, mines
 
