@@ -37,11 +37,10 @@ object FOptions: TFOptions
       AlignWithMargins = True
       Left = 5
       Top = 5
-      Width = 242
+      Width = 49
       Height = 17
       Align = alTop
       Caption = 'Difficulty'
-      ExplicitWidth = 49
     end
     object pnlDiffStandard: TPanel
       AlignWithMargins = True
@@ -92,7 +91,7 @@ object FOptions: TFOptions
         TabOrder = 3
         OnClick = rbClick
       end
-      object rbBegginer: TRadioButton
+      object rbBeginner: TRadioButton
         AlignWithMargins = True
         Left = 10
         Top = 3

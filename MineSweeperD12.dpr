@@ -6,6 +6,12 @@ program MineSweeperD12;
 ///
 /// Alex Nevskiy 2025-04-09
 ///
+
+
+
+
+{$R *.dres}
+
 uses
   Vcl.Forms,
   UMain in 'UMain.pas' {FMain},
@@ -18,6 +24,6 @@ begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TFMain, FMain);
-  Application.CreateForm(TFOptions, FOptions);
+  //Application.CreateForm(TFOptions, FOptions);
   Application.Run;
 end.

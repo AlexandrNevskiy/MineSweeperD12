@@ -137,6 +137,14 @@
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="UUtility.pas"/>
+        <RcItem Include="Img\Graph1.bmp">
+            <ResourceType>BITMAP</ResourceType>
+            <ResourceId>Graph1</ResourceId>
+        </RcItem>
+        <RcItem Include="Img\Mine.png">
+            <ResourceType>RCDATA</ResourceType>
+            <ResourceId>resMine</ResourceId>
+        </RcItem>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -174,6 +182,18 @@
                     <Platform Name="Win32">
                         <RemoteDir>Assets\</RemoteDir>
                         <RemoteName>Logo44x44.png</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Img\Graph1.bmp" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Img\Mine.png" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

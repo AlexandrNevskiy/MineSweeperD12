@@ -8,7 +8,7 @@ unit UUtility;
 ///
 interface
 
-uses Classes;
+uses Classes, Types, System.SysUtils;
 
 type
   TRange = record
@@ -18,13 +18,14 @@ type
   end;
 
   TGridData = record
+    Diff: integer; // 0=Custom 1=Beginner 2=Intermed 3=Advanced etc for future
     Width: integer;
     Height: integer;
     Mines: integer;
   end;
 
   TLocalParams = record
-    GridType: integer; // 0=Custom 1=Beginner 2=Intermed 3=Advanced etc for future
+    //GridType: integer; // 0=Custom 1=Beginner 2=Intermed 3=Advanced etc for future
     GridData :TGridData;
     FileName: string;
     //Statistics
@@ -33,12 +34,54 @@ type
     LongestWinningStreak: integer; // TODO
     LongestLosinggStreak: integer; //
     CurrentStreak: integer;        //
-    function GetParamsFileName: string;
+    function GetParamsFileName(ForceCreateDir: boolean = true): string;
     procedure LoadParams;
     procedure SaveParams;
     procedure Init;
     constructor Create(aForce: boolean);
   end;
+
+type
+  TInteger2D = array of array of integer;
+
+  TFieldInterpolation = record //Visual gradient for grid and tiles
+    FCells: TInteger2D;
+  private
+    function GetCell(X, Y: integer): Integer;
+    procedure SetCell(X, Y: integer; const Value: integer);
+  public
+    procedure Init(aGridData: TGridData);
+    property Cells[X, Y: integer]: Integer read GetCell write SetCell; default;
+  end;
+
+type
+  TGameGridCell = record
+    Flag: boolean;
+    Mine: boolean;
+    Number: integer;
+    Covered: boolean;
+    procedure Init;
+  end;
+
+  TGameGridCells = array of array of TGameGridCell;
+
+  TGameGrid = record
+    Width: integer;
+    Height: integer;
+    Mines: integer;
+    FPreGen: TInteger2D; //Daft mine field.
+    FCells: TGameGridCells;
+  private
+    function GetCell(X, Y: integer): TGameGridCell;
+    procedure SetCell(X, Y: integer; const Value: TGameGridCell);
+    procedure CreateAvoidanceZone;
+  public
+    procedure Init(GridData: TGridData);
+    procedure Pregen(aSeed: integer = 0);
+    property Cells[X, Y: integer]: TGameGridCell read GetCell write SetCell; default;
+  end;
+
+
 
   THighScore = class
     FScoreList: TStringList;
@@ -49,7 +92,7 @@ type
     destructor Destroy; override;
   end;
 
-function GetParamsFileName: string;
+//function GetParamsFileName: string;
 
 const
   cptProgramDataFolder = 'MineSweeperD12';
@@ -59,10 +102,16 @@ const
   cssParams = 'Params';
   cssStats = 'Statistics';
 
+  csFormCaption = 'MineSweeper (%s)';
+  csDiffLabel = '  %s'#13#10'  %d mines'#13#10'  %d x %d tile grid';
+
+  cminAvoidanceZoneW = 3;
+  cminAvoidanceZoneH = 3;
+
   //Game grid standard dimensions
-  cgdBeginner: TGridData = (Width: 9;  Height: 9;  Mines: 10);
-  cgdIntermed: TGridData = (Width: 16; Height: 16; Mines: 40);
-  cgdAdvanced: TGridData = (Width: 30; Height: 16; Mines: 99);
+  cgdBeginner: TGridData = (Diff: 1; Width: 9;  Height: 9;  Mines: 10);
+  cgdIntermed: TGridData = (Diff: 2; Width: 16; Height: 16; Mines: 40);
+  cgdAdvanced: TGridData = (Diff: 3; Width: 30; Height: 16; Mines: 99);
 
   //Game grid custom dimensions
   csCustomW: TRange = (Min:9; Max:30);
@@ -70,16 +119,23 @@ const
   csCustomM: TRange = (Min:10; Max:668);
 
   //Game grid cells size
-  ccCellW = 34;
-  ccCellH = 34;
+  ccCellW = 36;
+  ccCellH = 36;
+  ccSteps = 29;
+
+  //Game grid graph
+  cpFlag: TPoint = (X:642; Y:81);
+  cpMine: TPoint = (X:682; Y:81);
 
 function GetCurrentUser: string;
+
+function GenSeed: integer;
 
 //function NumbersOnly(aString: string): string;
 
 implementation
 
-uses Winapi.Windows, System.SysUtils, StrUtils, IniFiles;
+uses Winapi.Windows, StrUtils, IniFiles, Math;
 
 //-----------------------------------------------------
 
@@ -94,6 +150,14 @@ begin
   result := GetEnvironmentVariable('USERNAME');
 end;
 
+function GenSeed: integer;
+var H, M, S, MS: Word;
+begin
+  DecodeTime(Now, H, M, S, MS);
+  result := MS + S * 100 + M * 60 * 100 + H * 60 * 60 * 100;
+end;
+
+
 
 //function NumbersOnly(aString: string): string;
 //begin
@@ -104,13 +168,13 @@ end;
 //      result := result + aString[Idx];
 //end;
 
-function GetParamsFileName: string;
-begin
-  result := IncludeTrailingPathDelimiter(GetEnvironmentVariable('APPDATA')); //Params local for each user
-  result := IncludeTrailingPathDelimiter(result + cptProgramDataFolder);
-  result := result + cptParamsFileName;
-  //ex: "C:\Users\Alex\AppData\Roaming\MineSweeperD12\Settings.txt"
-end;
+//function GetParamsFileName: string;
+//begin
+//  result := IncludeTrailingPathDelimiter(GetEnvironmentVariable('APPDATA')); //Params local for each user
+//  result := IncludeTrailingPathDelimiter(result + cptProgramDataFolder);
+//  result := result + cptParamsFileName;
+//  //ex: "C:\Users\Alex\AppData\Roaming\MineSweeperD12\Settings.txt"
+//end;
 
 { TRange }
 
@@ -151,7 +215,7 @@ var IniFile: TMemIniFile;
 begin
   IniFile := TMemIniFile.Create(FileName);
   try
-    GridType := IniFile.ReadInteger(cssParams, 'GridType', 1);
+    GridData.Diff   := IniFile.ReadInteger(cssParams, 'GridDiff', 1);
     GridData.Width  := IniFile.ReadInteger(cssParams, 'GridWidth', 9);
     GridData.Height := IniFile.ReadInteger(cssParams, 'GridHeight', 9);
     GridData.Mines  := IniFile.ReadInteger(cssParams, 'GridMines', 10);
@@ -171,7 +235,7 @@ var IniFile: TMemIniFile;
 begin
   IniFile := TMemIniFile.Create(FileName);
   try
-    IniFile.WriteInteger(cssParams, 'GridType',  GridType);
+    IniFile.WriteInteger(cssParams, 'GridDiff',  GridData.Diff);
     IniFile.WriteInteger(cssParams, 'GridWidth', GridData.Width);
     IniFile.WriteInteger(cssParams, 'GridHeight', GridData.Height);
     IniFile.WriteInteger(cssParams, 'GridMines', GridData.Mines);
@@ -181,12 +245,13 @@ begin
     IniFile.WriteInteger(cssStats, 'LongestWinningStreak', LongestWinningStreak);
     IniFile.WriteInteger(cssStats, 'LongestLosinggStreak', LongestLosinggStreak);
     IniFile.WriteInteger(cssStats, 'CurrentStreak', CurrentStreak);
+    IniFile.UpdateFile;
   finally
     FreeAndNil(IniFile);
   end;
 end;
 
-constructor TLocalParams.Create(aForce: boolean);
+constructor TLocalParams.Create(aForce: boolean); //Trick to use Adv Record constructor
 begin
   FileName := GetParamsFileName;
   Init;
@@ -195,17 +260,18 @@ begin
 end;
 
 
-function TLocalParams.GetParamsFileName: string;
+function TLocalParams.GetParamsFileName(ForceCreateDir: boolean = true): string;
 begin
   result := IncludeTrailingPathDelimiter(GetEnvironmentVariable('APPDATA')); //Params local for each user
   result := IncludeTrailingPathDelimiter(result + cptProgramDataFolder);
+  if ForceCreateDir then
+    ForceDirectories(result);
   result := result + cptParamsFileName;
   //ex: "C:\Users\Alex\AppData\Roaming\MineSweeperD12\Settings.txt"
 end;
 
 procedure TLocalParams.Init;
 begin
-  GridType := 1; // 0=Custom 1=Beginner 2=Intermed 3=Advanced etc for future
   GridData := cgdBeginner;
   //Statistics
   GamesPlayed := 0;          //
@@ -213,6 +279,159 @@ begin
   LongestWinningStreak := 0; // TODO
   LongestLosinggStreak := 0; //
   CurrentStreak :=0 ;        //
+end;
+
+{ TGameGrid }
+
+function TGameGrid.GetCell(X, Y: integer): TGameGridCell;
+begin
+
+end;
+
+procedure TGameGrid.Init(GridData: TGridData);
+begin
+  Width := GridData.Width;
+  Height := GridData.Height;
+  Mines :=  GridData.Mines;
+  SetLength(FCells,  GridData.Width, GridData.Height);
+  SetLength(FPreGen, GridData.Width, GridData.Height);
+  for var x: integer := 0 to Width - 1 do
+    for var y: integer := 0 to Height - 1 do
+    begin
+      FCells[x, y].Init;
+      FPreGen[x, y] := 0;
+    end;
+  Pregen(GenSeed);
+end;
+
+
+procedure TGameGrid.CreateAvoidanceZone;
+var AvZW, AvZH: integer;
+    AvZX, AvZY: integer;
+begin
+  AvZW := Max(Width  div 5, cminAvoidanceZoneW);
+  AvZH := Max(Height div 5, cminAvoidanceZoneH);
+  AvZX := (Width  div 2) - (AvZW div 2);
+  AvZY := (Height div 2) - (AvZH div 2);
+  for var x: integer := 0 to AvZW do
+    for var y: integer := 0 to AvZH do
+      FPreGen[x + AvZX, y + AvZY] := -1;
+end;
+
+procedure CompactLArray(var aLArray: TArray<TPoint>);
+var a, b: integer;
+begin
+  b := 0;
+  for a := 0 to High(aLArray) do
+    if aLArray[a].x >= 0 then
+    begin
+      aLArray[b] := aLArray[a];
+      inc(b);
+    end;
+  SetLength(aLArray, b);
+end;
+
+
+procedure TGameGrid.Pregen(aSeed: integer = 0);
+var LArray: TArray<TPoint>;
+begin
+  if aSeed = 0 then
+    Randomize
+  else
+    RandSeed := aSeed;
+  SetLength(LArray, Width * Height);
+  CreateAvoidanceZone;
+  //Prefill
+  for var y: integer := 0 to Height - 1 do
+    for var x: integer := 0 to Width - 1 do
+    begin
+      if FPreGen[x, y] = 0 then
+      begin
+        LArray[x + y * Width].X := x;
+        LArray[x + y * Width].Y := y;
+      end
+      else
+        LArray[x + y * Width].X := -1;
+    end;
+  CompactLArray(LArray);
+  for var m: integer := 1 to Mines do
+  begin
+    var Idx: integer := Random(High(LArray) + 1);
+    FPreGen[LArray[Idx].X, LArray[Idx].Y] := 1; //Place mine here
+    LArray[Idx].X := -1;
+    CompactLArray(LArray);
+  end;
+end;
+
+
+procedure TGameGrid.SetCell(X, Y: integer; const Value: TGameGridCell);
+begin
+
+end;
+
+{ TGameGridCell }
+
+procedure TGameGridCell.Init;
+begin
+  Flag := false;
+  Mine := false;
+  Number := 0;
+  Covered := true;
+end;
+
+
+{ TFieldInterpolation }
+
+function TFieldInterpolation.GetCell(X, Y: integer): integer;
+begin
+  result := FCells[x, y];
+end;
+
+function LInt(a, b, c, steps: integer): integer;
+begin
+  result := trunc(a + (b - a) * (c / steps));  //Invention of the wheel detected...
+end;
+
+procedure TFieldInterpolation.Init(aGridData: TGridData);
+var aSteps, a, b, c: integer;
+    x, y: integer;
+begin
+  SetLength(FCells, aGridData.Width, aGridData.Height);
+  aSteps := aGridData.Width + aGridData.Height;
+  //if aSteps > ccSteps then
+  //  aSteps := ccSteps;
+
+  a := Max(0, ccSteps - aSteps);
+  b := ccSteps;
+  FCells[0, 0] := a;
+  FCells[aGridData.Width - 1, aGridData.Height - 1] := ccSteps;
+  c := aGridData.Width;
+  FCells[aGridData.Width - 1, 0] := LInt(a, b, c, aSteps);
+  c := aGridData.Height;
+  FCells[0, aGridData.Height - 1] := LInt(a, b, c, aSteps);
+
+  for x := 1 to aGridData.Width - 2 do
+  begin
+    a := FCells[0, 0];
+    b := FCells[aGridData.Width - 1, 0];
+    FCells[x, 0] := LInt(a, b, x, aGridData.Width - 1);
+    a := FCells[0, aGridData.Height - 1];
+    b := FCells[aGridData.Width - 1, aGridData.Height - 1];
+    FCells[x, aGridData.Height - 1] := LInt(a, b, x, aGridData.Width - 1);
+  end;
+
+  for x := 0 to aGridData.Width - 1 do
+  begin
+    a := FCells[x, 0];
+    b := FCells[x, aGridData.Height - 1];
+    for y := 1 to aGridData.Height - 2 do
+      FCells[x, y] := LInt(a, b, y, aGridData.Height - 1);
+  end;
+end;
+
+procedure TFieldInterpolation.SetCell(X, Y: integer; const Value: integer);
+begin
+  FCells[x, y] := Value;
 end;
 
 end.

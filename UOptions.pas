@@ -10,7 +10,8 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.Mask, Vcl.Buttons;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.Mask, Vcl.Buttons,
+  UUtility;
 
 type
   TFOptions = class(TForm)
@@ -20,7 +21,7 @@ type
     rbIntermed: TRadioButton;
     rbAdvanced: TRadioButton;
     rbCustom: TRadioButton;
-    rbBegginer: TRadioButton;
+    rbBeginner: TRadioButton;
     edWidth: TLabeledEdit;
     edHeight: TLabeledEdit;
     edMines: TLabeledEdit;
@@ -37,7 +38,8 @@ type
 //    edHeightCaption: string;
 //    edMinesCaption: string;
   public
-
+    procedure SetGridData(aValue: TGridData);
+    function GetGridData: TGridData;
   end;
 
 var
@@ -45,7 +47,6 @@ var
 
 implementation
 
-uses UUtility;
 
 {$R *.dfm}
 
@@ -106,13 +107,54 @@ end;
 
 procedure TFOptions.FormCreate(Sender: TObject);
 begin
-  rbBegginer.Caption := format('  Beginner'#13#10'  %d mines'#13#10'  %d x %d tile grid', [cgdBeginner.Mines, cgdBeginner.Width, cgdBeginner.Height]);
-  rbIntermed.Caption := format('  Intermediate'#13#10'  %d mines'#13#10'  %d x %d tile grid', [cgdIntermed.Mines, cgdIntermed.Width, cgdIntermed.Height]);
-  rbAdvanced.Caption := format('  Advanced'#13#10'  %d mines'#13#10'  %d x %d tile grid', [cgdAdvanced.Mines, cgdAdvanced.Width, cgdAdvanced.Height]);
+  rbBeginner.Caption := format(csDiffLabel, ['Beginner', cgdBeginner.Mines, cgdBeginner.Width, cgdBeginner.Height]);
+  rbIntermed.Caption := format(csDiffLabel, ['Intermediate', cgdIntermed.Mines, cgdIntermed.Width, cgdIntermed.Height]);
+  rbAdvanced.Caption := format(csDiffLabel, ['Advanced', cgdAdvanced.Mines, cgdAdvanced.Width, cgdAdvanced.Height]);
 
   edWidth.EditLabel.Caption  := format('Width (%d-%d):',  [csCustomW.Min, csCustomW.Max]);
   edHeight.EditLabel.Caption := format('Height (%d-%d):', [csCustomH.Min, csCustomH.Max]);
   edMines.EditLabel.Caption  := format('Mines (%d-%d):',  [csCustomM.Min, csCustomM.Max]);
+end;
+
+
+function TFOptions.GetGridData: TGridData;
+begin
+//  if rbBeginner.Checked then
+//    result := cgdBeginner
+//  else
+  if rbIntermed.Checked then
+    result := cgdIntermed
+  else
+  if rbAdvanced.Checked then
+    result := cgdAdvanced
+  else
+  if rbCustom.Checked then
+  begin
+    result.Diff := 0;
+    result.Width  := StrToIntDef(edWidth.Text , cgdBeginner.Width);
+    result.Height := StrToIntDef(edHeight.Text, cgdBeginner.Height);
+    result.Mines  := StrToIntDef(edMines.Text,  cgdBeginner.Mines);
+  end
+  else
+    result := cgdBeginner; //Default state for fuzzy input
+end;
+
+
+procedure TFOptions.SetGridData(aValue: TGridData);
+begin
+  case aValue.Diff of
+    //1:  rbBeginner.Checked := true;
+    0:  begin
+          rbCustom.Checked := true;
+          edWidth.Text := IntToStr(aValue.Width);
+          edHeight.Text := IntToStr(aValue.Height);
+          edMines.Text := IntToStr(aValue.Mines);
+        end;
+    2: rbIntermed.Checked := true;
+    3: rbAdvanced.Checked := true;
+    else
+      rbBeginner.Checked := true; //Default state for fuzzy input
+  end;
 end;
 
 
