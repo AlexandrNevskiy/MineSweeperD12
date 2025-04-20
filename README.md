@@ -16,7 +16,7 @@ TODO:
 
 Heavily refactored code.
 
-Tile shadoes, timer, mines-flags count, safe-start, correct open empty space
+Tile shadows, timer, mines-flags count, safe-start, correct open empty space
 
 ![434607331-fa245c9b-36f9-4398-9bc1-eff0ab690e64](https://github.com/user-attachments/assets/a0eaaab8-3a0d-47d8-874b-9759554f7d50)
 
