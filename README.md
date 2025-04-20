@@ -2,14 +2,25 @@
 TODO:
 
 1. ●●●●◌ Visually close to classic (new classic) Minesweeper
-2. ●●◌◌◌ Grid, Mines, Flags, Left-Right click
-3. ●●●●◌ Dificulty settings to Beginner, Intermediate, Advance and Custom grid size
+2. ●●●●◌ Grid, Mines, Flags, Left-Right click
+3. ●●●●● Dificulty settings to Beginner, Intermediate, Advance and Custom grid size
 4. ●◌◌◌◌ High Score table (shared for all users on computer)
 5. ◌◌◌◌◌ Personal statistics (for each users)
-6. ◌◌◌◌◌ Save game at exit
-7. ◌◌◌◌◌ Restore game at start
-8. ●●●●◌ Alghorithm to prevent First-Click-Loose
+6. ●●●●◌ Save game at exit
+7. ●●●●◌ Restore game at start
+8. ●●●●● Alghorithm to prevent First-Click-Loose
 9. ◌◌◌◌◌ Alghorithm to prevent "multi 8" at field generation (optional)
+
+---
+2025-04-19
+
+Heavily refactored code.
+
+Tile shadoes, timer, mines-flags count, safe-start, correct open empty space
+
+![434607331-fa245c9b-36f9-4398-9bc1-eff0ab690e64](https://github.com/user-attachments/assets/a0eaaab8-3a0d-47d8-874b-9759554f7d50)
+
+
 
 ---
 2025-04-10
