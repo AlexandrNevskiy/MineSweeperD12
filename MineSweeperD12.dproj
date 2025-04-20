@@ -137,13 +137,75 @@
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="UUtility.pas"/>
-        <RcItem Include="Img\Graph1.bmp">
-            <ResourceType>BITMAP</ResourceType>
-            <ResourceId>Graph1</ResourceId>
-        </RcItem>
+        <DCCReference Include="UGameGrid.pas"/>
+        <DCCReference Include="URenderGrid.pas"/>
         <RcItem Include="Img\Mine.png">
             <ResourceType>RCDATA</ResourceType>
-            <ResourceId>resMine</ResourceId>
+            <ResourceId>res11</ResourceId>
+        </RcItem>
+        <RcItem Include="Img\1.png">
+            <ResourceType>RCDATA</ResourceType>
+            <ResourceId>res1</ResourceId>
+        </RcItem>
+        <RcItem Include="Img\2.png">
+            <ResourceType>RCDATA</ResourceType>
+            <ResourceId>res2</ResourceId>
+        </RcItem>
+        <RcItem Include="Img\3.png">
+            <ResourceType>RCDATA</ResourceType>
+            <ResourceId>res3</ResourceId>
+        </RcItem>
+        <RcItem Include="Img\4.png">
+            <ResourceType>RCDATA</ResourceType>
+            <ResourceId>res4</ResourceId>
+        </RcItem>
+        <RcItem Include="Img\5.png">
+            <ResourceType>RCDATA</ResourceType>
+            <ResourceId>res5</ResourceId>
+        </RcItem>
+        <RcItem Include="Img\6.png">
+            <ResourceType>RCDATA</ResourceType>
+            <ResourceId>res6</ResourceId>
+        </RcItem>
+        <RcItem Include="Img\7.png">
+            <ResourceType>RCDATA</ResourceType>
+            <ResourceId>res7</ResourceId>
+        </RcItem>
+        <RcItem Include="Img\8.png">
+            <ResourceType>RCDATA</ResourceType>
+            <ResourceId>res8</ResourceId>
+        </RcItem>
+        <RcItem Include="Img\Flag.png">
+            <ResourceType>RCDATA</ResourceType>
+            <ResourceId>res10</ResourceId>
+        </RcItem>
+        <RcItem Include="Img\Tiles.bmp">
+            <ResourceType>BITMAP</ResourceType>
+            <ResourceId>res0</ResourceId>
+        </RcItem>
+        <RcItem Include="Img\Cross.png">
+            <ResourceType>RCDATA</ResourceType>
+            <ResourceId>res9</ResourceId>
+        </RcItem>
+        <RcItem Include="Img\Shadow1.png">
+            <ResourceType>RCDATA</ResourceType>
+            <ResourceId>res14</ResourceId>
+        </RcItem>
+        <RcItem Include="Img\Shadow2.png">
+            <ResourceType>RCDATA</ResourceType>
+            <ResourceId>res15</ResourceId>
+        </RcItem>
+        <RcItem Include="Img\Shadow3.png">
+            <ResourceType>RCDATA</ResourceType>
+            <ResourceId>res16</ResourceId>
+        </RcItem>
+        <RcItem Include="Img\MineDark.png">
+            <ResourceType>RCDATA</ResourceType>
+            <ResourceId>res12</ResourceId>
+        </RcItem>
+        <RcItem Include="Img\MineRed.png">
+            <ResourceType>RCDATA</ResourceType>
+            <ResourceId>res13</ResourceId>
         </RcItem>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
@@ -185,13 +247,103 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="Img\Graph1.bmp" Configuration="Debug" Class="ProjectFile">
+                <DeployFile LocalName="Img\1.png" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Img\2.png" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Img\3.png" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Img\4.png" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Img\5.png" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Img\6.png" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Img\7.png" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Img\8.png" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Img\Cross.png" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Img\Flag.png" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Win32">
                         <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Img\Mine.png" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Img\MineDark.png" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Img\MineRed.png" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Img\Shadow1.png" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Img\Shadow2.png" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Img\Shadow3.png" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Img\Tiles.bmp" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Win32">
                         <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>

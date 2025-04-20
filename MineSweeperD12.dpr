@@ -16,7 +16,9 @@ uses
   Vcl.Forms,
   UMain in 'UMain.pas' {FMain},
   UOptions in 'UOptions.pas' {FOptions},
-  UUtility in 'UUtility.pas';
+  UUtility in 'UUtility.pas',
+  UGameGrid in 'UGameGrid.pas',
+  URenderGrid in 'URenderGrid.pas';
 
 {$R *.res}
 

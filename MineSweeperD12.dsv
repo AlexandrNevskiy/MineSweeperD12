@@ -1,8 +1,8 @@
 ﻿[ClosedView_RDpcUHJvamVjdHNcTWluZVN3ZWVwZXJcVU9wdGlvbnMucGFz]
 Module=D:\Projects\MineSweeper\UOptions.pas
-CursorX=59
-CursorY=139
-TopLine=79
+CursorX=18
+CursorY=142
+TopLine=127
 LeftCol=1
 Elisions=
 Bookmarks=
@@ -10,9 +10,9 @@ EditViewName=D:\Projects\MineSweeper\UOptions.pas
 
 [ClosedView_RDpcUHJvamVjdHNcTWluZVN3ZWVwZXJcVVV0aWxpdHkucGFz]
 Module=D:\Projects\MineSweeper\UUtility.pas
-CursorX=1
-CursorY=291
-TopLine=279
+CursorX=9
+CursorY=160
+TopLine=142
 LeftCol=1
 Elisions=
 Bookmarks=
@@ -30,9 +30,9 @@ EditViewName=D:\Projects\MineSweeper\UOptions.dfm
 
 [ClosedView_RDpcUHJvamVjdHNcTWluZVN3ZWVwZXJcVU1haW4ucGFz]
 Module=D:\Projects\MineSweeper\UMain.pas
-CursorX=28
-CursorY=122
-TopLine=273
+CursorX=103
+CursorY=13
+TopLine=1
 LeftCol=1
 Elisions=
 Bookmarks=
@@ -51,7 +51,7 @@ EditViewName=D:\Projects\MineSweeper\UHighScore.pas
 [ClosedView_RDpcUHJvamVjdHNcTWluZVN3ZWVwZXJcTWluZVN3ZWVwZXJEMTIuZHBy]
 Module=D:\Projects\MineSweeper\MineSweeperD12.dpr
 CursorX=5
-CursorY=25
+CursorY=29
 TopLine=1
 LeftCol=1
 Elisions=
@@ -197,4 +197,244 @@ LeftCol=1
 Elisions={{2051,4},{2067,15},{'TScrollWindow'}}{{2161,4},{2265,15},{'TMainMenuBarStyleHook'}}
 Bookmarks=
 EditViewName=d:\program files (x86)\embarcadero\studio\23.0\SOURCE\VCL\Vcl.Forms.pas
+
+[ClosedView_RDpcUHJvamVjdHNcTWluZVN3ZWVwZXJcVUdhbWVHcmlkLnBhcw==]
+Module=D:\Projects\MineSweeper\UGameGrid.pas
+CursorX=54
+CursorY=74
+TopLine=61
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=D:\Projects\MineSweeper\UGameGrid.pas
+[ClosedView_ZDpccHJvZ3JhbSBmaWxlcyAoeDg2KVxlbWJhcmNhZGVyb1xzdHVkaW9cMjMuMFxTT1VSQ0VcVkNM
+XFZjbC5JbWFnaW5nLnBuZ2ltYWdlLnBhcw==]
+Module=d:\program files (x86)\embarcadero\studio\23.0\SOURCE\VCL\Vcl.Imaging.pngimage.pas
+CursorX=27
+CursorY=5092
+TopLine=5075
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=d:\program files (x86)\embarcadero\studio\23.0\SOURCE\VCL\Vcl.Imaging.pngimage.pas
+[ClosedView_ZDpccHJvZ3JhbSBmaWxlcyAoeDg2KVxlbWJhcmNhZGVyb1xzdHVkaW9cMjMuMFxzb3VyY2VccnRs
+XGNvbW1vblxTeXN0ZW0uQ2xhc3Nlcy5wYXM=]
+Module=d:\program files (x86)\embarcadero\studio\23.0\source\rtl\common\System.Classes.pas
+CursorX=1
+CursorY=10344
+TopLine=10333
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=
+[ClosedView_ZDpccHJvZ3JhbSBmaWxlcyAoeDg2KVxlbWJhcmNhZGVyb1xzdHVkaW9cMjMuMFxTT1VSQ0VcVkNM
+XFZjbC5JbWFnaW5nLnBuZ2ltYWdlLnBhcw==]
+Module=d:\program files (x86)\embarcadero\studio\23.0\SOURCE\VCL\Vcl.Imaging.pngimage.pas
+CursorX=27
+CursorY=5092
+TopLine=5075
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=d:\program files (x86)\embarcadero\studio\23.0\SOURCE\VCL\Vcl.Imaging.pngimage.pas
+[ClosedView_ZDpccHJvZ3JhbSBmaWxlcyAoeDg2KVxlbWJhcmNhZGVyb1xzdHVkaW9cMjMuMFxTT1VSQ0VcVkNM
+XFZjbC5JbWFnaW5nLnBuZ2ltYWdlLnBhcw==]
+Module=d:\program files (x86)\embarcadero\studio\23.0\SOURCE\VCL\Vcl.Imaging.pngimage.pas
+CursorX=27
+CursorY=5092
+TopLine=5075
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=d:\program files (x86)\embarcadero\studio\23.0\SOURCE\VCL\Vcl.Imaging.pngimage.pas
+
+[ClosedView_RDpcUHJvamVjdHNcTWluZVN3ZWVwZXJcVVJlbmRlckdyaWQucGFz]
+Module=D:\Projects\MineSweeper\URenderGrid.pas
+CursorX=22
+CursorY=16
+TopLine=1
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=D:\Projects\MineSweeper\URenderGrid.pas
+[ClosedView_ZDpccHJvZ3JhbSBmaWxlcyAoeDg2KVxlbWJhcmNhZGVyb1xzdHVkaW9cMjMuMFxzb3VyY2VccnRs
+XHdpblxXaW5hcGkuV2luZG93cy5wYXM=]
+Module=d:\program files (x86)\embarcadero\studio\23.0\source\rtl\win\Winapi.Windows.pas
+CursorX=20
+CursorY=38
+TopLine=25
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=d:\program files (x86)\embarcadero\studio\23.0\source\rtl\win\Winapi.Windows.pas
+[ClosedView_ZDpccHJvZ3JhbSBmaWxlcyAoeDg2KVxlbWJhcmNhZGVyb1xzdHVkaW9cMjMuMFxzb3VyY2VccnRs
+XHdpblxXaW5hcGkuV2luZG93cy5wYXM=]
+Module=d:\program files (x86)\embarcadero\studio\23.0\source\rtl\win\Winapi.Windows.pas
+CursorX=20
+CursorY=38
+TopLine=25
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=d:\program files (x86)\embarcadero\studio\23.0\source\rtl\win\Winapi.Windows.pas
+[ClosedView_ZDpccHJvZ3JhbSBmaWxlcyAoeDg2KVxlbWJhcmNhZGVyb1xzdHVkaW9cMjMuMFxTT1VSQ0VcVkNM
+XFZjbC5HcmFwaGljcy5wYXM=]
+Module=d:\program files (x86)\embarcadero\studio\23.0\SOURCE\VCL\Vcl.Graphics.pas
+CursorX=18
+CursorY=10
+TopLine=1
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=
+[ClosedView_ZDpccHJvZ3JhbSBmaWxlcyAoeDg2KVxlbWJhcmNhZGVyb1xzdHVkaW9cMjMuMFxTT1VSQ0VcVkNM
+XFZjbC5HcmFwaGljcy5wYXM=]
+Module=d:\program files (x86)\embarcadero\studio\23.0\SOURCE\VCL\Vcl.Graphics.pas
+CursorX=18
+CursorY=10
+TopLine=1
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=
+[ClosedView_ZDpccHJvZ3JhbSBmaWxlcyAoeDg2KVxlbWJhcmNhZGVyb1xzdHVkaW9cMjMuMFxzb3VyY2VccnRs
+XGNvbW1vblxTeXN0ZW0uQ2xhc3Nlcy5wYXM=]
+Module=d:\program files (x86)\embarcadero\studio\23.0\source\rtl\common\System.Classes.pas
+CursorX=1
+CursorY=9847
+TopLine=9829
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=d:\program files (x86)\embarcadero\studio\23.0\source\rtl\common\System.Classes.pas
+[ClosedView_ZDpccHJvZ3JhbSBmaWxlcyAoeDg2KVxlbWJhcmNhZGVyb1xzdHVkaW9cMjMuMFxzb3VyY2VccnRs
+XGNvbW1vblxTeXN0ZW0uQ2xhc3Nlcy5wYXM=]
+Module=d:\program files (x86)\embarcadero\studio\23.0\source\rtl\common\System.Classes.pas
+CursorX=1
+CursorY=9847
+TopLine=9829
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=d:\program files (x86)\embarcadero\studio\23.0\source\rtl\common\System.Classes.pas
+[ClosedView_ZDpccHJvZ3JhbSBmaWxlcyAoeDg2KVxlbWJhcmNhZGVyb1xzdHVkaW9cMjMuMFxzb3VyY2VccnRs
+XGNvbW1vblxTeXN0ZW0uVUlUeXBlcy5wYXM=]
+Module=d:\program files (x86)\embarcadero\studio\23.0\source\rtl\common\System.UITypes.pas
+CursorX=1
+CursorY=53
+TopLine=33
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=
+[ClosedView_ZDpccHJvZ3JhbSBmaWxlcyAoeDg2KVxlbWJhcmNhZGVyb1xzdHVkaW9cMjMuMFxTT1VSQ0VcVkNM
+XFZjbC5EaWFsb2dzLnBhcw==]
+Module=d:\program files (x86)\embarcadero\studio\23.0\SOURCE\VCL\Vcl.Dialogs.pas
+CursorX=39
+CursorY=124
+TopLine=104
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=d:\program files (x86)\embarcadero\studio\23.0\SOURCE\VCL\Vcl.Dialogs.pas
+[ClosedView_ZDpccHJvZ3JhbSBmaWxlcyAoeDg2KVxlbWJhcmNhZGVyb1xzdHVkaW9cMjMuMFxTT1VSQ0VcVkNM
+XFZjbC5EaWFsb2dzLnBhcw==]
+Module=d:\program files (x86)\embarcadero\studio\23.0\SOURCE\VCL\Vcl.Dialogs.pas
+CursorX=39
+CursorY=124
+TopLine=104
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=d:\program files (x86)\embarcadero\studio\23.0\SOURCE\VCL\Vcl.Dialogs.pas
+[ClosedView_ZDpccHJvZ3JhbSBmaWxlcyAoeDg2KVxlbWJhcmNhZGVyb1xzdHVkaW9cMjMuMFxzb3VyY2VccnRs
+XHdpblxXaW5hcGkuV2luZG93cy5wYXM=]
+Module=d:\program files (x86)\embarcadero\studio\23.0\source\rtl\win\Winapi.Windows.pas
+CursorX=1
+CursorY=42131
+TopLine=42120
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=
+[ClosedView_ZDpccHJvZ3JhbSBmaWxlcyAoeDg2KVxlbWJhcmNhZGVyb1xzdHVkaW9cMjMuMFxzb3VyY2VccnRs
+XGNvbW1vblxTeXN0ZW0uQ2xhc3Nlcy5wYXM=]
+Module=d:\program files (x86)\embarcadero\studio\23.0\source\rtl\common\System.Classes.pas
+CursorX=1
+CursorY=188
+TopLine=170
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=d:\program files (x86)\embarcadero\studio\23.0\source\rtl\common\System.Classes.pas
+[ClosedView_ZDpccHJvZ3JhbSBmaWxlcyAoeDg2KVxlbWJhcmNhZGVyb1xzdHVkaW9cMjMuMFxTT1VSQ0VcVkNM
+XFZjbC5JbWFnaW5nLnBuZ2ltYWdlLnBhcw==]
+Module=d:\program files (x86)\embarcadero\studio\23.0\SOURCE\VCL\Vcl.Imaging.pngimage.pas
+CursorX=1
+CursorY=4685
+TopLine=4667
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=d:\program files (x86)\embarcadero\studio\23.0\SOURCE\VCL\Vcl.Imaging.pngimage.pas
+[ClosedView_ZDpccHJvZ3JhbSBmaWxlcyAoeDg2KVxlbWJhcmNhZGVyb1xzdHVkaW9cMjMuMFxTT1VSQ0VcVkNM
+XFZjbC5JbWFnaW5nLnBuZ2ltYWdlLnBhcw==]
+Module=d:\program files (x86)\embarcadero\studio\23.0\SOURCE\VCL\Vcl.Imaging.pngimage.pas
+CursorX=1
+CursorY=4472
+TopLine=4454
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=d:\program files (x86)\embarcadero\studio\23.0\SOURCE\VCL\Vcl.Imaging.pngimage.pas
+[ClosedView_ZDpccHJvZ3JhbSBmaWxlcyAoeDg2KVxlbWJhcmNhZGVyb1xzdHVkaW9cMjMuMFxTT1VSQ0VcVkNM
+XFZjbC5JbWFnaW5nLnBuZ2ltYWdlLnBhcw==]
+Module=d:\program files (x86)\embarcadero\studio\23.0\SOURCE\VCL\Vcl.Imaging.pngimage.pas
+CursorX=1
+CursorY=4472
+TopLine=4454
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=d:\program files (x86)\embarcadero\studio\23.0\SOURCE\VCL\Vcl.Imaging.pngimage.pas
+[ClosedView_ZDpccHJvZ3JhbSBmaWxlcyAoeDg2KVxlbWJhcmNhZGVyb1xzdHVkaW9cMjMuMFxzb3VyY2VccnRs
+XGNvbW1vblxTeXN0ZW0uQ2xhc3Nlcy5wYXM=]
+Module=d:\program files (x86)\embarcadero\studio\23.0\source\rtl\common\System.Classes.pas
+CursorX=1
+CursorY=10355
+TopLine=10337
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=d:\program files (x86)\embarcadero\studio\23.0\source\rtl\common\System.Classes.pas
+[ClosedView_ZDpccHJvZ3JhbSBmaWxlcyAoeDg2KVxlbWJhcmNhZGVyb1xzdHVkaW9cMjMuMFxzb3VyY2VccnRs
+XGNvbW1vblxTeXN0ZW0uQ2xhc3Nlcy5wYXM=]
+Module=d:\program files (x86)\embarcadero\studio\23.0\source\rtl\common\System.Classes.pas
+CursorX=1
+CursorY=10355
+TopLine=10337
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=d:\program files (x86)\embarcadero\studio\23.0\source\rtl\common\System.Classes.pas
+[ClosedView_ZDpccHJvZ3JhbSBmaWxlcyAoeDg2KVxlbWJhcmNhZGVyb1xzdHVkaW9cMjMuMFxzb3VyY2VccnRs
+XGNvbW1vblxTeXN0ZW0uQ2xhc3Nlcy5wYXM=]
+Module=d:\program files (x86)\embarcadero\studio\23.0\source\rtl\common\System.Classes.pas
+CursorX=1
+CursorY=10355
+TopLine=10337
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=d:\program files (x86)\embarcadero\studio\23.0\source\rtl\common\System.Classes.pas
+
+[ClosedView_RDpcUHJvamVjdHNcTWluZVN3ZWVwZXJcVU1haW4uZGZt]
+Module=D:\Projects\MineSweeper\UMain.dfm
+CursorX=36
+CursorY=2850
+TopLine=2852
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=
 

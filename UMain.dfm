@@ -9,6 +9,7 @@ object FMain: TFMain
   Color = clBtnFace
   Constraints.MinHeight = 445
   Constraints.MinWidth = 394
+  DoubleBuffered = True
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -12
@@ -2416,13 +2417,28 @@ object FMain: TFMain
     484848E44E4E4FF32626270C0000000000000000000000000000000000000000
     FFFF0000F89F0000F80F0000E0070000E0070000800300008001000080000000
     00010000000000000001000080010000C0070000C0070000F01F0000F11F0000}
+  KeyPreview = True
   Menu = MainMenu
   Position = poScreenCenter
-  OnCanResize = FormCanResize
   OnCreate = FormCreate
   OnDestroy = FormDestroy
+  OnHelp = FormHelp
+  OnKeyUp = FormKeyUp
   OnPaint = FormPaint
   TextHeight = 15
+  object imgGrid: TImage
+    Left = 43
+    Top = 208
+    Width = 105
+    Height = 105
+    Margins.Left = 25
+    Margins.Top = 20
+    Margins.Right = 25
+    Margins.Bottom = 15
+    Transparent = True
+    OnMouseDown = imgGridMouseDown
+    OnMouseUp = imgGridMouseUp
+  end
   object pnlBottom: TPanel
     AlignWithMargins = True
     Left = 15
@@ -2801,9 +2817,6 @@ object FMain: TFMain
       ParentBackground = False
       ParentFont = False
       TabOrder = 0
-      ExplicitLeft = 34
-      ExplicitTop = 0
-      ExplicitHeight = 35
     end
     object pnlMine: TPanel
       AlignWithMargins = True
@@ -2824,32 +2837,22 @@ object FMain: TFMain
       ParentBackground = False
       ParentFont = False
       TabOrder = 1
-      ExplicitLeft = 34
-      ExplicitTop = 0
-      ExplicitHeight = 35
     end
   end
-  object pnlGrid: TPanel
+  object pnlGrid_old: TPanel
     AlignWithMargins = True
-    Left = 1
-    Top = 7
-    Width = 109
-    Height = 109
+    Left = 30
+    Top = 112
+    Width = 145
+    Height = 89
     Margins.Left = 25
     Margins.Top = 20
     Margins.Right = 25
     Margins.Bottom = 15
     BevelOuter = bvLowered
-    BorderWidth = 1
+    BevelWidth = 2
     TabOrder = 1
-    object imgPlaceholder: TPaintBox
-      Left = 2
-      Top = 2
-      Width = 105
-      Height = 105
-      Color = clBtnFace
-      ParentColor = False
-    end
+    Visible = False
   end
   object MainMenu: TMainMenu
     Left = 24
@@ -2931,7 +2934,7 @@ object FMain: TFMain
     end
   end
   object Timer: TTimer
-    Enabled = False
+    Interval = 100
     OnTimer = TimerTimer
     Left = 144
     Top = 32

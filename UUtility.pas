@@ -1,4 +1,4 @@
-unit UUtility;
+﻿unit UUtility;
 ///
 /// MineSweeperD12 (RAD Programmer Challenge #1))
 ///
@@ -17,11 +17,26 @@ type
     function IsInRange(aValue: integer): boolean;
   end;
 
-  TGridData = record
+  TMouseButtoState = (mbsNone, mbsDown, mbsPressed, mbsUp);
+
+  TInput = record
+    OldL: TMouseButtoState;
+    OldR: TMouseButtoState;
+    //function UpdateState(anOldstate: TMouseButtoState; aNew: boolean): TMouseButtoState;
+  public
+    //LButton: TMouseButtoState;
+    //RButton: TMouseButtoState;
+    LButton: boolean;
+    RButton: boolean;
+    procedure Update;
+  end;
+
+  TGridData = packed record
     Diff: integer; // 0=Custom 1=Beginner 2=Intermed 3=Advanced etc for future
     Width: integer;
     Height: integer;
     Mines: integer;
+    Ticks: UInt64;
   end;
 
   TLocalParams = record
@@ -44,7 +59,7 @@ type
 type
   TInteger2D = array of array of integer;
 
-  TFieldInterpolation = record //Visual gradient for grid and tiles
+  TGradientField = record //Visual gradient for grid and tiles
     FCells: TInteger2D;
   private
     function GetCell(X, Y: integer): Integer;
@@ -54,33 +69,30 @@ type
     property Cells[X, Y: integer]: Integer read GetCell write SetCell; default;
   end;
 
+  TDraftField = record
+    FGridData: TGridData;
+    FCells: TInteger2D;
+  private
+    procedure CreateSafeArea;
+  public
+    procedure Generate(aGridData: TGridData; aSeed: integer = 0);
+  end;
+
 type
   TGameGridCell = record
     Flag: boolean;
     Mine: boolean;
     Number: integer;
     Covered: boolean;
+    Hovered: boolean;
+    Checked: boolean;
+    ToRender: boolean;
     procedure Init;
+    procedure Open;
+    function IncNumber: integer;
   end;
 
   TGameGridCells = array of array of TGameGridCell;
-
-  TGameGrid = record
-    Width: integer;
-    Height: integer;
-    Mines: integer;
-    FPreGen: TInteger2D; //Daft mine field.
-    FCells: TGameGridCells;
-  private
-    function GetCell(X, Y: integer): TGameGridCell;
-    procedure SetCell(X, Y: integer; const Value: TGameGridCell);
-    procedure CreateAvoidanceZone;
-  public
-    procedure Init(GridData: TGridData);
-    procedure Pregen(aSeed: integer = 0);
-    property Cells[X, Y: integer]: TGameGridCell read GetCell write SetCell; default;
-  end;
-
 
 
   THighScore = class
@@ -99,11 +111,20 @@ const
   cptHighScoreFileName = 'HighScore.txt';
   cptParamsFileName = 'Settings.txt';
 
+  cptSaveBeginner = 'Beginner.sav';
+  cptSaveIntermed = 'Intermed.sav';
+  cptSaveAdvanced = 'Advanced.sav';
+  cptSaveCustom = 'Custom.sav';
+
   cssParams = 'Params';
   cssStats = 'Statistics';
 
   csFormCaption = 'MineSweeper (%s)';
   csDiffLabel = '  %s'#13#10'  %d mines'#13#10'  %d x %d tile grid';
+
+  csStyleDef = 'res%d';
+
+  cSaveVer: string[3] = '001';
 
   cminAvoidanceZoneW = 3;
   cminAvoidanceZoneH = 3;
@@ -122,20 +143,35 @@ const
   ccCellW = 36;
   ccCellH = 36;
   ccSteps = 29;
+  ссTileY = 2;   //Tile res
+  ссGridY = 42;  //Empty grid res
 
   //Game grid graph
-  cpFlag: TPoint = (X:642; Y:81);
-  cpMine: TPoint = (X:682; Y:81);
+  //cpFlag: TPoint = (X:642; Y:81);
+  //cpMine: TPoint = (X:682; Y:81);
+  cixCross    =  9;
+  cixFlag     = 10;
+  cixMine     = 11;
+  cixMineDark = 12;
+  cixMineRed  = 13;
+  cixShad1    = 14;
+  cixShad2    = 15;
+  cixShad3    = 16;
+  cixMax = 16;
+
+  //Sounds
+  csndWrong = 1;
 
 function GetCurrentUser: string;
-
+function GetSaveFileName(aGridData: TGridData): string;
 function GenSeed: integer;
+
 
 //function NumbersOnly(aString: string): string;
 
 implementation
 
-uses Winapi.Windows, StrUtils, IniFiles, Math;
+uses Winapi.Windows, StrUtils, IniFiles, Math, Generics.Collections;
 
 //-----------------------------------------------------
 
@@ -150,6 +186,7 @@ begin
   result := GetEnvironmentVariable('USERNAME');
 end;
 
+
 function GenSeed: integer;
 var H, M, S, MS: Word;
 begin
@@ -157,6 +194,22 @@ begin
   result := MS + S * 100 + M * 60 * 100 + H * 60 * 60 * 100;
 end;
 
+
+function GetSaveFileName(aGridData: TGridData): string;
+var s: string;
+begin
+  result := IncludeTrailingPathDelimiter(GetEnvironmentVariable('APPDATA'));
+  result := IncludeTrailingPathDelimiter(result + cptProgramDataFolder);
+  ForceDirectories(result);
+  case aGridData.Diff of
+    0:  s := cptSaveCustom;
+    2:  s := cptSaveIntermed;
+    3:  s := cptSaveAdvanced;
+    else
+      s := cptSaveBeginner;
+  end;
+  result := result + s;
+end;
 
 
 //function NumbersOnly(aString: string): string;
@@ -230,6 +283,7 @@ begin
   end;
 end;
 
+
 procedure TLocalParams.SaveParams;
 var IniFile: TMemIniFile;
 begin
@@ -251,6 +305,7 @@ begin
   end;
 end;
 
+
 constructor TLocalParams.Create(aForce: boolean); //Trick to use Adv Record constructor
 begin
   FileName := GetParamsFileName;
@@ -270,6 +325,7 @@ begin
   //ex: "C:\Users\Alex\AppData\Roaming\MineSweeperD12\Settings.txt"
 end;
 
+
 procedure TLocalParams.Init;
 begin
   GridData := cgdBeginner;
@@ -283,93 +339,16 @@ end;
 
 { TGameGrid }
 
-function TGameGrid.GetCell(X, Y: integer): TGameGridCell;
-begin
-
-end;
-
-procedure TGameGrid.Init(GridData: TGridData);
-begin
-  Width := GridData.Width;
-  Height := GridData.Height;
-  Mines :=  GridData.Mines;
-  SetLength(FCells,  GridData.Width, GridData.Height);
-  SetLength(FPreGen, GridData.Width, GridData.Height);
-  for var x: integer := 0 to Width - 1 do
-    for var y: integer := 0 to Height - 1 do
-    begin
-      FCells[x, y].Init;
-      FPreGen[x, y] := 0;
-    end;
-  Pregen(GenSeed);
-end;
-
-
-procedure TGameGrid.CreateAvoidanceZone;
-var AvZW, AvZH: integer;
-    AvZX, AvZY: integer;
-begin
-  AvZW := Max(Width  div 5, cminAvoidanceZoneW);
-  AvZH := Max(Height div 5, cminAvoidanceZoneH);
-  AvZX := (Width  div 2) - (AvZW div 2);
-  AvZY := (Height div 2) - (AvZH div 2);
-  for var x: integer := 0 to AvZW do
-    for var y: integer := 0 to AvZH do
-      FPreGen[x + AvZX, y + AvZY] := -1;
-end;
-
-procedure CompactLArray(var aLArray: TArray<TPoint>);
-var a, b: integer;
-begin
-  b := 0;
-  for a := 0 to High(aLArray) do
-    if aLArray[a].x >= 0 then
-    begin
-      aLArray[b] := aLArray[a];
-      inc(b);
-    end;
-  SetLength(aLArray, b);
-end;
-
-
-procedure TGameGrid.Pregen(aSeed: integer = 0);
-var LArray: TArray<TPoint>;
-begin
-  if aSeed = 0 then
-    Randomize
-  else
-    RandSeed := aSeed;
-  SetLength(LArray, Width * Height);
-  CreateAvoidanceZone;
-  //Prefill
-  for var y: integer := 0 to Height - 1 do
-    for var x: integer := 0 to Width - 1 do
-    begin
-      if FPreGen[x, y] = 0 then
-      begin
-        LArray[x + y * Width].X := x;
-        LArray[x + y * Width].Y := y;
-      end
-      else
-        LArray[x + y * Width].X := -1;
-    end;
-  CompactLArray(LArray);
-  for var m: integer := 1 to Mines do
-  begin
-    var Idx: integer := Random(High(LArray) + 1);
-    FPreGen[LArray[Idx].X, LArray[Idx].Y] := 1; //Place mine here
-    LArray[Idx].X := -1;
-    CompactLArray(LArray);
-  end;
-end;
-
-
-procedure TGameGrid.SetCell(X, Y: integer; const Value: TGameGridCell);
-begin
-
-end;
 
 { TGameGridCell }
+
+function TGameGridCell.IncNumber: integer;
+begin
+  if not Mine then
+    Inc(Number);
+  result := Number;
+end;
+
 
 procedure TGameGridCell.Init;
 begin
@@ -377,29 +356,38 @@ begin
   Mine := false;
   Number := 0;
   Covered := true;
+  Hovered := false;
+  Checked := false;
+  ToRender := true;
 end;
 
 
-{ TFieldInterpolation }
+procedure TGameGridCell.Open;
+begin
+  Covered := false;
+  ToRender := true;
+end;
 
-function TFieldInterpolation.GetCell(X, Y: integer): integer;
+{ TGradientField }
+
+function TGradientField.GetCell(X, Y: integer): integer;
 begin
   result := FCells[x, y];
 end;
+
 
 function LInt(a, b, c, steps: integer): integer;
 begin
   result := trunc(a + (b - a) * (c / steps));  //Invention of the wheel detected...
 end;
 
-procedure TFieldInterpolation.Init(aGridData: TGridData);
+
+procedure TGradientField.Init(aGridData: TGridData);
 var aSteps, a, b, c: integer;
     x, y: integer;
 begin
   SetLength(FCells, aGridData.Width, aGridData.Height);
   aSteps := aGridData.Width + aGridData.Height;
-  //if aSteps > ccSteps then
-  //  aSteps := ccSteps;
 
   a := Max(0, ccSteps - aSteps);
   b := ccSteps;
@@ -429,9 +417,139 @@ begin
   end;
 end;
 
-procedure TFieldInterpolation.SetCell(X, Y: integer; const Value: integer);
+
+procedure TGradientField.SetCell(X, Y: integer; const Value: integer);
 begin
   FCells[x, y] := Value;
 end;
+
+
+{ TDraftField }
+
+procedure TDraftField.CreateSafeArea;
+var AvZW, AvZH: integer;
+    AvZX, AvZY: integer;
+    AreaX, AreaY: TRange;
+begin
+  AvZW := Max(FGridData.Width  div 5, cminAvoidanceZoneW);
+  AvZH := Max(FGridData.Height div 5, cminAvoidanceZoneH);
+  AvZX := (FGridData.Width  div 2) - (AvZW div 2);
+  AvZY := (FGridData.Height div 2) - (AvZH div 2);
+  AreaX.Min := AvZX;
+  AreaX.Max := AvZX + AvZW;
+  AreaY.Min := AvZY;
+  AreaY.Max := AvZY + AvZH;
+
+  for var x: integer := 0 to FGridData.Width - 1 do
+    for var y: integer := 0 to FGridData.Height - 1 do
+      if AreaX.IsInRange(x) and AreaY.IsInRange(y) then
+        FCells[x, y] := -1
+      else
+        FCells[x, y] := 0;
+end;
+
+
+//procedure CompactLArray(var aLArray: TArray<TPoint>);
+//var a, b: integer;
+//begin
+//  b := 0;
+//  for a := 0 to High(aLArray) do
+//    if aLArray[a].x >= 0 then
+//    begin
+//      aLArray[b] := aLArray[a];
+//      inc(b);
+//    end;
+//  SetLength(aLArray, b);
+//end;
+
+
+//procedure TDraftField.Generate(aGridData: TGridData; aSeed: integer = 0);
+//var LArray: TArray<TPoint>;
+//begin
+//  FGridData := aGridData;
+//  SetLength(FCells, FGridData.Width, FGridData.Height);
+//
+//  if aSeed = 0 then
+//    Randomize
+//  else
+//    RandSeed := aSeed;
+//  SetLength(LArray, FGridData.Width * FGridData.Height);
+//  CreateSafeArea; //Create safety area
+//  //Prefill
+//  for var y: integer := 0 to FGridData.Height - 1 do
+//    for var x: integer := 0 to FGridData.Width - 1 do
+//    begin
+//      if FCells[x, y] = 0 then
+//      begin
+//        LArray[x + y * FGridData.Width].X := x;
+//        LArray[x + y * FGridData.Width].Y := y;
+//      end
+//      else
+//        LArray[x + y * FGridData.Width].X := -1;
+//    end;
+//  CompactLArray(LArray);
+//  for var m: integer := 1 to FGridData.Mines do
+//  begin
+//    var Idx: integer := Random(High(LArray) + 1);
+//    FCells[LArray[Idx].X, LArray[Idx].Y] := 1; //Place mine here
+//    LArray[Idx].X := -1;
+//    CompactLArray(LArray);
+//  end;
+//end;
+
+//Keep It Simple S
+procedure TDraftField.Generate(aGridData: TGridData; aSeed: integer = 0);
+var OneD: TList<TPoint>;
+begin
+  FGridData := aGridData;
+  SetLength(FCells, FGridData.Width, FGridData.Height);
+  if aSeed = 0 then
+    Randomize
+  else
+    RandSeed := aSeed;
+  CreateSafeArea; //Create safety area
+  OneD := TList<TPoint>.Create;
+  try
+    OneD.Capacity := FGridData.Width * FGridData.Height;
+    for var y: integer := 0 to FGridData.Height - 1 do
+      for var x: integer := 0 to FGridData.Width - 1 do
+        if FCells[x, y] = 0 then
+          OneD.Add(Point(x, y));
+    for var m: integer := 1 to FGridData.Mines do
+    begin
+      var Idx: integer := Random(OneD.Count);
+      FCells[OneD[Idx].X, OneD[Idx].Y] := 1; //Place mine here
+      OneD.Delete(Idx);
+    end;
+  finally
+    FreeAndNil(OneD);
+  end;
+end;
+
+
+{ TInput }
+procedure TInput.Update;
+begin
+//  NewL := (GetAsyncKeyState(VK_LBUTTON) and $8000 > 0);
+//  NewR := (GetAsyncKeyState(VK_RBUTTON) and $8000 > 0);
+//  LButton := UpdateState(LButton, NewL);
+//  RButton := UpdateState(RButton, NewR);
+  LButton :=  (GetAsyncKeyState(VK_LBUTTON) and $8000 > 0);
+  RButton :=  (GetAsyncKeyState(VK_RBUTTON) and $8000 > 0);
+end;
+
+
+//function TInput.UpdateState(anOldstate: TMouseButtoState; aNew: boolean): TMouseButtoState;
+//begin
+//  result := mbsNone;
+//  if (anOldstate = mbsNone) and aNew  then exit(mbsDown);
+//  if (anOldstate = mbsDown) and aNew  then exit(mbsPressed);
+//  if (anOldstate = mbsDown) and not aNew  then exit(mbsUp);
+//  if (anOldstate = mbsPressed) and aNew  then exit(mbsPressed);
+//  if (anOldstate = mbsPressed) and not aNew  then exit(mbsUp);
+//  if (anOldstate = mbsUp) and aNew  then exit(mbsDown);
+////if (anOldstate = mbsUp) and not aNew  then exit(mbsNone);
+////(mbsNone, mbsDown, mbsPressed, mbsUp)
+//end;
 
 end.
