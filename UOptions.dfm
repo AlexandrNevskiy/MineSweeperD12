@@ -4,8 +4,8 @@ object FOptions: TFOptions
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Options'
-  ClientHeight = 557
-  ClientWidth = 272
+  ClientHeight = 700
+  ClientWidth = 370
   Color = clBtnFace
   DoubleBuffered = True
   Font.Charset = DEFAULT_CHARSET
@@ -17,15 +17,15 @@ object FOptions: TFOptions
   Position = poMainFormCenter
   OnCreate = FormCreate
   DesignSize = (
-    272
-    557)
+    370
+    700)
   TextHeight = 17
   object pnlDifficulty: TPanel
     AlignWithMargins = True
     Left = 10
     Top = 10
-    Width = 252
-    Height = 471
+    Width = 350
+    Height = 423
     Margins.Left = 10
     Margins.Top = 10
     Margins.Right = 10
@@ -35,22 +35,29 @@ object FOptions: TFOptions
     TabOrder = 1
     object lblDiffCaption: TLabel
       AlignWithMargins = True
-      Left = 5
-      Top = 5
-      Width = 49
+      Left = 7
+      Top = 7
+      Width = 338
       Height = 17
+      Margins.Left = 5
+      Margins.Top = 5
+      Margins.Bottom = 5
       Align = alTop
       Caption = 'Difficulty'
+      ExplicitLeft = 5
+      ExplicitTop = 5
+      ExplicitWidth = 49
     end
     object pnlDiffStandard: TPanel
       AlignWithMargins = True
       Left = 5
-      Top = 28
+      Top = 32
       Width = 204
-      Height = 438
+      Height = 386
       Align = alLeft
       BevelOuter = bvNone
       TabOrder = 0
+      ExplicitHeight = 434
       object rbIntermed: TRadioButton
         AlignWithMargins = True
         Left = 10
@@ -115,7 +122,7 @@ object FOptions: TFOptions
         Margins.Left = 150
         Margins.Top = 5
         Margins.Right = 10
-        Margins.Bottom = 10
+        Margins.Bottom = 5
         Align = alTop
         EditLabel.Width = 49
         EditLabel.Height = 25
@@ -133,13 +140,13 @@ object FOptions: TFOptions
       object edHeight: TLabeledEdit
         AlignWithMargins = True
         Left = 150
-        Top = 325
+        Top = 315
         Width = 44
         Height = 25
         Margins.Left = 150
-        Margins.Top = 10
+        Margins.Top = 5
         Margins.Right = 10
-        Margins.Bottom = 10
+        Margins.Bottom = 5
         Align = alTop
         EditLabel.Width = 53
         EditLabel.Height = 25
@@ -154,17 +161,18 @@ object FOptions: TFOptions
         TabOrder = 5
         Text = '9'
         OnChange = edCustomChange
+        ExplicitTop = 325
       end
       object edMines: TLabeledEdit
         AlignWithMargins = True
         Left = 150
-        Top = 370
+        Top = 350
         Width = 44
         Height = 25
         Margins.Left = 150
-        Margins.Top = 10
+        Margins.Top = 5
         Margins.Right = 10
-        Margins.Bottom = 10
+        Margins.Bottom = 5
         Align = alTop
         EditLabel.Width = 50
         EditLabel.Height = 25
@@ -179,27 +187,172 @@ object FOptions: TFOptions
         TabOrder = 6
         Text = '10'
         OnChange = edCustomChange
+        ExplicitTop = 370
       end
     end
   end
   object btnOk: TBitBtn
-    Left = 25
-    Top = 514
+    Left = 123
+    Top = 657
     Width = 113
     Height = 25
     Anchors = [akRight, akBottom]
     Caption = 'Ok'
     ModalResult = 1
     TabOrder = 0
+    ExplicitLeft = 25
+    ExplicitTop = 514
   end
   object btnCancel: TBitBtn
-    Left = 144
-    Top = 514
+    Left = 242
+    Top = 657
     Width = 113
     Height = 25
     Anchors = [akRight, akBottom]
     Caption = 'Cancel'
     ModalResult = 2
     TabOrder = 2
+    ExplicitLeft = 144
+    ExplicitTop = 514
+  end
+  object pnlSettings: TPanel
+    AlignWithMargins = True
+    Left = 10
+    Top = 436
+    Width = 350
+    Height = 197
+    Margins.Left = 10
+    Margins.Top = 0
+    Margins.Right = 10
+    Margins.Bottom = 10
+    Align = alTop
+    BevelOuter = bvNone
+    TabOrder = 3
+    ExplicitLeft = 15
+    object cbAnimations: TCheckBox
+      AlignWithMargins = True
+      Left = 10
+      Top = 10
+      Width = 337
+      Height = 17
+      Margins.Left = 10
+      Margins.Top = 10
+      Align = alTop
+      Caption = 'Display animation'
+      Checked = True
+      State = cbChecked
+      TabOrder = 0
+      ExplicitLeft = 64
+      ExplicitTop = 40
+      ExplicitWidth = 97
+    end
+    object cbSounds: TCheckBox
+      AlignWithMargins = True
+      Left = 10
+      Top = 38
+      Width = 337
+      Height = 17
+      Margins.Left = 10
+      Margins.Top = 8
+      Align = alTop
+      Caption = 'Play sounds'
+      Checked = True
+      State = cbChecked
+      TabOrder = 1
+      OnClick = cbSoundsClick
+      ExplicitLeft = 11
+      ExplicitTop = 106
+      ExplicitWidth = 335
+    end
+    object cbSnd1: TCheckBox
+      AlignWithMargins = True
+      Left = 30
+      Top = 61
+      Width = 317
+      Height = 17
+      Margins.Left = 30
+      Align = alTop
+      Caption = 'Area'
+      Checked = True
+      State = cbChecked
+      TabOrder = 2
+      ExplicitLeft = 11
+      ExplicitTop = 126
+      ExplicitWidth = 335
+    end
+    object cbSnd3: TCheckBox
+      AlignWithMargins = True
+      Left = 30
+      Top = 107
+      Width = 317
+      Height = 17
+      Margins.Left = 30
+      Align = alTop
+      Caption = 'Click'
+      Checked = True
+      State = cbChecked
+      TabOrder = 3
+      ExplicitLeft = 31
+      ExplicitTop = 146
+      ExplicitWidth = 315
+    end
+    object cbSnd2: TCheckBox
+      AlignWithMargins = True
+      Left = 30
+      Top = 84
+      Width = 317
+      Height = 17
+      Margins.Left = 30
+      Align = alTop
+      Caption = 'Check'
+      Checked = True
+      State = cbChecked
+      TabOrder = 4
+      ExplicitLeft = 31
+      ExplicitTop = 146
+      ExplicitWidth = 315
+    end
+    object cbSnd4: TCheckBox
+      AlignWithMargins = True
+      Left = 30
+      Top = 130
+      Width = 317
+      Height = 17
+      Margins.Left = 30
+      Align = alTop
+      Caption = 'Flag'
+      Checked = True
+      State = cbChecked
+      TabOrder = 5
+      ExplicitTop = 153
+    end
+    object cbSnd5: TCheckBox
+      AlignWithMargins = True
+      Left = 30
+      Top = 153
+      Width = 317
+      Height = 17
+      Margins.Left = 30
+      Align = alTop
+      Caption = 'Loose'
+      Checked = True
+      State = cbChecked
+      TabOrder = 6
+      ExplicitTop = 167
+    end
+    object cbSnd6: TCheckBox
+      AlignWithMargins = True
+      Left = 30
+      Top = 176
+      Width = 317
+      Height = 17
+      Margins.Left = 30
+      Align = alTop
+      Caption = 'Win'
+      Checked = True
+      State = cbChecked
+      TabOrder = 7
+      ExplicitTop = 193
+    end
   end
 end

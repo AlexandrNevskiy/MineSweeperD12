@@ -37,6 +37,27 @@ type
     Height: integer;
     Mines: integer;
     Ticks: UInt64;
+    function IsSame(aGridData: TGridData): boolean;
+  end;
+
+const
+  //Sounds
+  csndArea  = 1;
+  csndCheck = 2;
+  csndClick = 3;
+  csndFlag =  4;
+  csndLoose = 5;
+  csndSuccess = 6;
+  csndMax = 6;
+
+type
+  TSettings = record
+    Animation: boolean;
+    Sounds: boolean;
+    snd: array[1..csndMax] of boolean;
+    procedure Init;
+    procedure SaveToIni(FileName: string);
+    procedure LoadFromIni(FileName: string);
   end;
 
   TLocalParams = record
@@ -49,9 +70,12 @@ type
     LongestWinningStreak: integer; // TODO
     LongestLosinggStreak: integer; //
     CurrentStreak: integer;        //
+    Settings: TSettings;
     function GetParamsFileName(ForceCreateDir: boolean = true): string;
     procedure LoadParams;
     procedure SaveParams;
+    procedure LoadSettings;
+    procedure SaveSettings;
     procedure Init;
     constructor Create(aForce: boolean);
   end;
@@ -80,13 +104,14 @@ type
 
 type
   TGameGridCell = record
-    Flag: boolean;
-    Mine: boolean;
-    Number: integer;
-    Covered: boolean;
-    Hovered: boolean;
-    Checked: boolean;
-    ToRender: boolean;
+    Flag: boolean;    //Tile marked with flag
+    Mine: boolean;    //Mine in tile
+    Number: integer;  //Number of mines arount tile
+    Covered: boolean; //Content of tile is hidden
+    Hovered: boolean; //Not used yet (mouse hover the tile)
+    Checked: boolean; //Used internally in open-area alghoritm and to display "red" mine
+    DownCheck: boolean; //::AN 2025-04-22 Show L-R-Down check
+    ToRender: boolean;//Force tile to re-render ant Render stage
     procedure Init;
     procedure Open;
     function IncNumber: integer;
@@ -118,11 +143,14 @@ const
 
   cssParams = 'Params';
   cssStats = 'Statistics';
+  cssSettings = 'Settings';
 
   csFormCaption = 'MineSweeper (%s)';
   csDiffLabel = '  %s'#13#10'  %d mines'#13#10'  %d x %d tile grid';
 
-  csStyleDef = 'res%d';
+  //csStyleDef = 'res%d';
+  csStyleDef = 'res';
+  csResLoad = '%s_%s%d';
 
   cSaveVer: string[3] = '001';
 
@@ -159,8 +187,6 @@ const
   cixShad3    = 16;
   cixMax = 16;
 
-  //Sounds
-  csndWrong = 1;
 
 function GetCurrentUser: string;
 function GetSaveFileName(aGridData: TGridData): string;
@@ -266,8 +292,10 @@ end;
 procedure TLocalParams.LoadParams;
 var IniFile: TMemIniFile;
 begin
+  Settings.LoadFromIni(FileName);
   IniFile := TMemIniFile.Create(FileName);
   try
+    //Grid
     GridData.Diff   := IniFile.ReadInteger(cssParams, 'GridDiff', 1);
     GridData.Width  := IniFile.ReadInteger(cssParams, 'GridWidth', 9);
     GridData.Height := IniFile.ReadInteger(cssParams, 'GridHeight', 9);
@@ -284,9 +312,15 @@ begin
 end;
 
 
+procedure TLocalParams.LoadSettings;
+begin
+  Settings.LoadFromIni(FileName);
+end;
+
 procedure TLocalParams.SaveParams;
 var IniFile: TMemIniFile;
 begin
+  Settings.SaveToIni(FileName);
   IniFile := TMemIniFile.Create(FileName);
   try
     IniFile.WriteInteger(cssParams, 'GridDiff',  GridData.Diff);
@@ -305,6 +339,11 @@ begin
   end;
 end;
 
+
+procedure TLocalParams.SaveSettings;
+begin
+  Settings.SaveToIni(FileName);
+end;
 
 constructor TLocalParams.Create(aForce: boolean); //Trick to use Adv Record constructor
 begin
@@ -358,6 +397,7 @@ begin
   Covered := true;
   Hovered := false;
   Checked := false;
+  DownCheck := false; //::AN 2025-04-022
   ToRender := true;
 end;
 
@@ -365,6 +405,7 @@ end;
 procedure TGameGridCell.Open;
 begin
   Covered := false;
+  Flag := false;
   ToRender := true;
 end;
 
@@ -551,5 +592,57 @@ end;
 ////if (anOldstate = mbsUp) and not aNew  then exit(mbsNone);
 ////(mbsNone, mbsDown, mbsPressed, mbsUp)
 //end;
+
+{ TSettings }
+
+procedure TSettings.Init;
+begin
+  Animation := false;
+  Sounds := false;
+  for var Idx: integer := Low(snd) to High(snd) do
+    snd[Idx] := false;
+end;
+
+
+procedure TSettings.LoadFromIni(FileName: string);
+var IniFile: TMemIniFile;
+begin
+  IniFile := TMemIniFile.Create(FileName);
+  try
+    Animation := IniFile.ReadBool(cssSettings, 'Animation',  true);
+    Sounds := IniFile.ReadBool(cssSettings, 'Sounds', true);
+    for var Idx: integer := Low(snd) to High(snd) do
+      Snd[Idx] := IniFile.ReadBool(cssSettings, 'Snd' + IntToStr(Idx), true);
+  finally
+    FreeAndNil(IniFile);
+  end;
+end;
+
+
+procedure TSettings.SaveToIni(FileName: string);
+var IniFile: TMemIniFile;
+begin
+  IniFile := TMemIniFile.Create(FileName);
+  try
+    IniFile.WriteBool(cssSettings, 'Animation',  Animation);
+    IniFile.WriteBool(cssSettings, 'Sounds', Sounds);
+    for var Idx: integer := Low(snd) to High(snd) do
+      IniFile.WriteBool(cssSettings, 'Snd' + IntToStr(Idx), Snd[Idx]);
+    IniFile.UpdateFile;
+  finally
+    FreeAndNil(IniFile);
+  end;
+end;
+
+{ TGridData }
+
+function TGridData.IsSame(aGridData: TGridData): boolean;
+begin
+  result :=
+  (Diff   = aGridData.Diff) and
+  (Width  = aGridData.Width) and
+  (Height = aGridData.Height) and
+  (Mines  = aGridData.Mines);
+end;
 
 end.

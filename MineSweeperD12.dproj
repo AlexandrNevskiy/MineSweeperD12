@@ -139,73 +139,108 @@
         <DCCReference Include="UUtility.pas"/>
         <DCCReference Include="UGameGrid.pas"/>
         <DCCReference Include="URenderGrid.pas"/>
+        <DCCReference Include="USound.pas"/>
+        <DCCReference Include="UDebug.pas">
+            <Form>DebugForm</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <RcItem Include="Img\Mine.png">
             <ResourceType>RCDATA</ResourceType>
-            <ResourceId>res11</ResourceId>
+            <ResourceId>res_img11</ResourceId>
         </RcItem>
         <RcItem Include="Img\1.png">
             <ResourceType>RCDATA</ResourceType>
-            <ResourceId>res1</ResourceId>
+            <ResourceId>res_img1</ResourceId>
         </RcItem>
         <RcItem Include="Img\2.png">
             <ResourceType>RCDATA</ResourceType>
-            <ResourceId>res2</ResourceId>
+            <ResourceId>res_img2</ResourceId>
         </RcItem>
         <RcItem Include="Img\3.png">
             <ResourceType>RCDATA</ResourceType>
-            <ResourceId>res3</ResourceId>
+            <ResourceId>res_img3</ResourceId>
         </RcItem>
         <RcItem Include="Img\4.png">
             <ResourceType>RCDATA</ResourceType>
-            <ResourceId>res4</ResourceId>
+            <ResourceId>res_img4</ResourceId>
         </RcItem>
         <RcItem Include="Img\5.png">
             <ResourceType>RCDATA</ResourceType>
-            <ResourceId>res5</ResourceId>
+            <ResourceId>res_img5</ResourceId>
         </RcItem>
         <RcItem Include="Img\6.png">
             <ResourceType>RCDATA</ResourceType>
-            <ResourceId>res6</ResourceId>
+            <ResourceId>res_img6</ResourceId>
         </RcItem>
         <RcItem Include="Img\7.png">
             <ResourceType>RCDATA</ResourceType>
-            <ResourceId>res7</ResourceId>
+            <ResourceId>res_img7</ResourceId>
         </RcItem>
         <RcItem Include="Img\8.png">
             <ResourceType>RCDATA</ResourceType>
-            <ResourceId>res8</ResourceId>
+            <ResourceId>res_img8</ResourceId>
         </RcItem>
         <RcItem Include="Img\Flag.png">
             <ResourceType>RCDATA</ResourceType>
-            <ResourceId>res10</ResourceId>
+            <ResourceId>res_img10</ResourceId>
         </RcItem>
         <RcItem Include="Img\Tiles.bmp">
             <ResourceType>BITMAP</ResourceType>
-            <ResourceId>res0</ResourceId>
+            <ResourceId>res_img0</ResourceId>
         </RcItem>
         <RcItem Include="Img\Cross.png">
             <ResourceType>RCDATA</ResourceType>
-            <ResourceId>res9</ResourceId>
+            <ResourceId>res_img9</ResourceId>
         </RcItem>
         <RcItem Include="Img\Shadow1.png">
             <ResourceType>RCDATA</ResourceType>
-            <ResourceId>res14</ResourceId>
+            <ResourceId>res_img14</ResourceId>
         </RcItem>
         <RcItem Include="Img\Shadow2.png">
             <ResourceType>RCDATA</ResourceType>
-            <ResourceId>res15</ResourceId>
+            <ResourceId>res_img15</ResourceId>
         </RcItem>
         <RcItem Include="Img\Shadow3.png">
             <ResourceType>RCDATA</ResourceType>
-            <ResourceId>res16</ResourceId>
+            <ResourceId>res_img16</ResourceId>
         </RcItem>
         <RcItem Include="Img\MineDark.png">
             <ResourceType>RCDATA</ResourceType>
-            <ResourceId>res12</ResourceId>
+            <ResourceId>res_img12</ResourceId>
         </RcItem>
         <RcItem Include="Img\MineRed.png">
             <ResourceType>RCDATA</ResourceType>
-            <ResourceId>res13</ResourceId>
+            <ResourceId>res_img13</ResourceId>
+        </RcItem>
+        <RcItem Include="Snd\Snd_Area1.wav">
+            <ContainerId>ResourceItem</ContainerId>
+            <ResourceType>WAV</ResourceType>
+            <ResourceId>res_snd1</ResourceId>
+        </RcItem>
+        <RcItem Include="Snd\Snd_Click1.wav">
+            <ContainerId>ResourceItem</ContainerId>
+            <ResourceType>WAV</ResourceType>
+            <ResourceId>res_snd3</ResourceId>
+        </RcItem>
+        <RcItem Include="Snd\Snd_Flag1.wav">
+            <ContainerId>ResourceItem</ContainerId>
+            <ResourceType>WAV</ResourceType>
+            <ResourceId>res_snd4</ResourceId>
+        </RcItem>
+        <RcItem Include="Snd\Snd_Loose1.wav">
+            <ContainerId>ResourceItem</ContainerId>
+            <ResourceType>WAV</ResourceType>
+            <ResourceId>res_snd5</ResourceId>
+        </RcItem>
+        <RcItem Include="Snd\Snd_Success1.wav">
+            <ContainerId>ResourceItem</ContainerId>
+            <ResourceType>WAV</ResourceType>
+            <ResourceId>res_snd6</ResourceId>
+        </RcItem>
+        <RcItem Include="Snd\Snd_Check1.wav">
+            <ContainerId>ResourceItem</ContainerId>
+            <ResourceType>WAV</ResourceType>
+            <ResourceId>res_snd2</ResourceId>
         </RcItem>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
@@ -344,6 +379,42 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Img\Tiles.bmp" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Snd\Snd_Area1.wav" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Snd\Snd_Check1.wav" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Snd\Snd_Click1.wav" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Snd\Snd_Flag1.wav" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Snd\Snd_Loose1.wav" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Snd\Snd_Success1.wav" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Win32">
                         <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>

@@ -27,19 +27,33 @@ type
     edMines: TLabeledEdit;
     btnOk: TBitBtn;
     btnCancel: TBitBtn;
+    pnlSettings: TPanel;
+    cbAnimations: TCheckBox;
+    cbSounds: TCheckBox;
+    cbSnd1: TCheckBox;
+    cbSnd3: TCheckBox;
+    cbSnd2: TCheckBox;
+    cbSnd4: TCheckBox;
+    cbSnd5: TCheckBox;
+    cbSnd6: TCheckBox;
     procedure rbClick(Sender: TObject);
     procedure CheckCustomControls;
     procedure EnableCustom(anEnable: boolean);
     procedure CheckCustomValid;
     procedure edCustomChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure cbSoundsClick(Sender: TObject);
   private
 //    edWidthCaption: string;
 //    edHeightCaption: string;
 //    edMinesCaption: string;
+
   public
     procedure SetGridData(aValue: TGridData);
     function GetGridData: TGridData;
+    procedure SetSettings(aValue: TSettings);
+    function GetSettings:TSettings;
+    procedure UpdateSndEnabled;
   end;
 
 var
@@ -51,6 +65,12 @@ implementation
 {$R *.dfm}
 
 { TFOptions }
+
+procedure TFOptions.cbSoundsClick(Sender: TObject);
+begin
+  UpdateSndEnabled;
+end;
+
 
 procedure TFOptions.CheckCustomControls;
 begin
@@ -140,6 +160,19 @@ begin
 end;
 
 
+function TFOptions.GetSettings: TSettings;
+begin
+  result.Animation := cbAnimations.Checked;
+  result.Sounds := cbSounds.Checked;
+  for var Idx: integer := Low(result.snd) to High(result.snd) do
+  begin
+    var cbControl: TControl := pnlSettings.FindChildControl('cbSnd' + IntToStr(Idx));
+    if cbControl is TCheckBox then
+      result.snd[Idx] := (cbControl as TCheckBox).Checked;
+  end;
+end;
+
+
 procedure TFOptions.SetGridData(aValue: TGridData);
 begin
   case aValue.Diff of
@@ -154,6 +187,33 @@ begin
     3: rbAdvanced.Checked := true;
     else
       rbBeginner.Checked := true; //Default state for fuzzy input
+  end;
+end;
+
+
+procedure TFOptions.SetSettings(aValue: TSettings);
+begin
+  cbAnimations.Checked := aValue.Animation;
+  cbSounds.Checked := aValue.Sounds;
+  for var Idx: integer := Low(aValue.snd) to High(aValue.snd) do
+  begin
+    var cbControl: TControl := pnlSettings.FindChildControl('cbSnd' + IntToStr(Idx));
+    if cbControl is TCheckBox then
+      (cbControl as TCheckBox).Checked := aValue.snd[Idx];
+  end;
+end;
+
+
+procedure TFOptions.UpdateSndEnabled;
+var Idx: integer;
+    Enable: boolean;
+begin
+  Enable := cbSounds.Checked;
+  for Idx := 1 to csndMax do
+  begin
+    var cbControl: TControl := pnlSettings.FindChildControl('cbSnd' + IntToStr(Idx));
+    if cbControl is TCheckBox then
+      (cbControl as TCheckBox).Enabled := Enable;
   end;
 end;
 

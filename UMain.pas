@@ -56,6 +56,9 @@ type
     procedure imgGridMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     function FormHelp(Command: Word; Data: THelpEventData; var CallHelp: Boolean): Boolean;
     procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure imgGridMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+    procedure imgGridMouseLeave(Sender: TObject);
+    procedure FormDeactivate(Sender: TObject);
   private
     LocalParams: TLocalParams;
     GameGrid: TGameGridClass;
@@ -76,7 +79,7 @@ var
 
 implementation
 
-uses Math, UOptions;
+uses Math, UOptions, UDebug;
 
 {$R *.dfm}
 //{$R Graph.res}
@@ -111,11 +114,19 @@ end;
 
 procedure TFMain.FormCreate(Sender: TObject);
 begin
-  GameGrid := TGameGridClass.Create(Self);
+  GameGrid  := TGameGridClass.Create(Self);
   Caption := format(csFormCaption, [GetCurrentUser]);
   OldCell.SetLocation(-1, -1);
   LocalParams := TLocalParams.Create(True);
+  LocalParams.LoadSettings;
+  GameGrid.Settings := LocalParams.Settings;
   StartNewGame;
+end;
+
+
+procedure TFMain.FormDeactivate(Sender: TObject);
+begin
+  GameGrid.ClearDownCheck;
 end;
 
 
@@ -139,6 +150,9 @@ procedure TFMain.FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
   if (ssShift in Shift) and (ssCtrl in Shift) and (Key = VK_F1)  then
     GameGrid.DEBUG_ShowMines;
+
+  if (Key = VK_F1) then DebugForm.ShowDebug(GameGrid, 0);
+
 end;
 
 procedure TFMain.FormPaint(Sender: TObject);
@@ -164,8 +178,36 @@ begin
   GameGrid.Input.Update;
   LButton := GameGrid.Input.LButton;
   RButton := GameGrid.Input.RButton;
+  if LButton and RButton then
+  begin
+    var NewCell: TPoint := ClickToCell(X, Y);
+    GameGrid.SetDownCheck(NewCell.X, NewCell.Y);
+  end;
+
 end;
 
+
+procedure TFMain.imgGridMouseLeave(Sender: TObject);
+begin
+  GameGrid.ClearDownCheck;
+end;
+
+
+procedure TFMain.imgGridMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+begin
+  GameGrid.Input.Update;
+  LButton := GameGrid.Input.LButton;
+  RButton := GameGrid.Input.RButton;
+  if LButton and RButton then
+  begin
+    var NewCell: TPoint := ClickToCell(X, Y);
+    if OldCell <> NewCell then
+    begin
+      OldCell := ClickToCell(X, Y);
+      GameGrid.SetDownCheck(NewCell.X, NewCell.Y);
+    end;
+  end;
+end;
 
 procedure TFMain.imgGridMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 var NewCell: TPoint;
@@ -173,12 +215,20 @@ begin
   GameGrid.Input.Update;
   NewCell := ClickToCell(X, Y);
   if NewCell <> OldCell then
-    OldCell.SetLocation(-1, -1)
+  begin
+    OldCell.SetLocation(-1, -1);
+    GameGrid.ClearDownCheck(true);
+  end
   else
   begin
-    if     LButton and not RButton then GameGrid.FieldClick(NewCell.X, NewCell.Y); //On Left Click
-    if not LButton and     RButton then GameGrid.FieldMark (NewCell.X, NewCell.Y); //On Righ Click
-    if     LButton and     RButton then GameGrid.FieldCheck(NewCell.X, NewCell.Y); //On Left-Righ Click
+    RButton := RButton or (Button = mbRight); //Force to catch RMB
+    if     LButton and not RButton then GameGrid.FieldClick(NewCell.X, NewCell.Y) //On Left Click
+    else
+    if not LButton and     RButton then GameGrid.FieldMark (NewCell.X, NewCell.Y) //On Righ Click
+    else
+    if     LButton and     RButton then GameGrid.FieldCheck(NewCell.X, NewCell.Y) //On Left-Righ Click
+    else
+      GameGrid.ClearDownCheck(true);
     Refresh;
   end;
 end;
@@ -233,9 +283,17 @@ begin
   FOptions := TFOptions.Create(Self);
   try
     FOptions.SetGridData(LocalParams.GridData);
+    FOptions.SetSettings(LocalParams.Settings);
+    FOptions.UpdateSndEnabled;
     if FOptions.ShowModal = mrOk then
     begin
-      //if GameGrid.GameState = gsActive then
+      LocalParams.Settings := FOptions.GetSettings;
+      GameGrid.Settings := LocalParams.Settings;
+      LocalParams.SaveSettings;
+      if GameGrid.GameState <> gsActive then
+        LocalParams.GridData := FOptions.GetGridData
+      else
+      if not LocalParams.GridData.IsSame(FOptions.GetGridData) then
       begin
         var aForm: TForm := CreateMessageDialog('These settings won''t apply to the game in progress. What do you want to do?'#13#10#13#10+
         '1. Quit and start a new game with the new settings'#13#10#13#10+

@@ -9,14 +9,15 @@ unit UGameGrid;
 ///
 interface
 
-uses Classes, Graphics, SysUtils, Vcl.Imaging.Pngimage, Forms, Types, Generics.Collections,
-     UUtility, URenderGrid;
+uses Classes, Graphics, SysUtils, Vcl.Imaging.Pngimage, Forms, Types, Generics.Collections, MMSystem,
+     UUtility, URenderGrid, USound;
 
 type
   TGameState = (gsNew, {gsPrepared,} gsRestored, gsActive, gsWin, gsLoose);
 
   TGameGridClass = class
     FGameState: TGameState;
+    FSettings: TSettings;
     FGameTicks: UInt64;
     FGridData: TGridData;
     Flags: integer;
@@ -25,6 +26,7 @@ type
     DraftField: TDraftField;
     MineField: TGameGridCells;
     RenderGrid: TRenderGrid;
+    GameSound: TSoundClass;
   private
     procedure ScrollToCell(toX, toY: integer); //+
     procedure PrepareMineField; //+
@@ -38,16 +40,18 @@ type
     function IsValid(aPoint: TPoint): boolean; overload;
     procedure FieldClick(X, Y: integer); //On Left Click
     procedure FieldMark (X, Y: integer); //On Righ Click
-    procedure FieldCheck(X, Y: integer); //On Left-Righ Click     (MouseUp)
-    procedure FieldCheckShow(X, Y: integer; Show: boolean); //On Left-Righ Click (MouseDown)
+    function FieldCheck(X, Y: integer): boolean; //On Left-Righ Click     (MouseUp)
+    //procedure FieldCheckShow(X, Y: integer; Show: boolean); //On Left-Righ Click (MouseDown)
+    procedure SetDownCheck(X, Y: integer); //On Left-Righ Click (MouseDown)
+    procedure ClearDownCheck(aForce:boolean = false);
     procedure Init(aGridData: TGridData); //+
     function LoadFromFile: boolean; //+
     function SaveToFile: boolean;   //+
     function Mines_Flags: integer; //+
     function TimerCount: integer;  //?
-    function RenderField: boolean;
+    function RenderField(aForce: boolean = false): boolean;
     property GameState: TGameState read FGameState;
-
+    property Settings: TSettings read FSettings write FSettings;
     procedure DEBUG_ShowMines;
     constructor Create(aDrawForm: TForm);
     destructor Destroy; override;
@@ -55,7 +59,7 @@ type
 
 implementation
 
-uses ZLib, StrUtils, Math, Windows, IOUtils;
+uses ZLib, StrUtils, Math, Windows, IOUtils, UDebug;
 
 
 { TGameGridClass }
@@ -69,6 +73,7 @@ var ToOpen: TList<TPoint>;
       result := 0;
       if not IsValid(nX, nY) then exit;
       if MineField[nX, nY].Mine then exit;
+      if MineField[nX, nY].Flag then exit;
       MineField[nX, nY].Open;
       if isValid(nX, nY + 1) then MineField[nX, nY + 1].ToRender := true; //Redraw grid to remove shadow
       if isValid(nX + 1, nY) then MineField[nX + 1, nY].ToRender := true; //Redraw grid to remove shadow
@@ -85,6 +90,7 @@ begin
   If MineField[X, Y].Mine then ;//BOOM!
   If MineField[X, Y].Number > 0 then
   begin
+    PlaySound(csndClick);
     MineField[X, Y].Open;
     if isValid(X, Y + 1) then MineField[X, Y + 1].ToRender := true; //Redraw grid to remove shadow
     if isValid(X + 1, Y) then MineField[X + 1, Y].ToRender := true; //Redraw grid to remove shadow
@@ -93,9 +99,11 @@ begin
   begin //Open empty area
     ToOpen := TList<TPoint>.Create;
     try
+      PlaySound(csndArea);
       ToOpen.Clear;
       ToOpen.Add(Point(X, Y));
       MineField[X, Y].Open;
+      RecountFlags;
       Proceed := 1;
       Stop := 0;
       while Proceed > 0 do  //Non-Recursion version.
@@ -118,7 +126,11 @@ begin
           Proceed := Proceed + Check(x    , y + 1);
           Proceed := Proceed + Check(x + 1, y + 1);
         end;
-        //RenderField;  //Animation
+        if Settings.Animation then
+        begin
+          RenderField;  //Animation
+          Sleep(10);
+        end;
       end;
       for x := 0 to FGridData.Width - 1 do
         for y := 0 to FGridData.Height - 1 do
@@ -133,63 +145,49 @@ end;
 
 function TGameGridClass.CheckAround(X, Y: integer; anOpenList: TList<TPoint>): boolean;
 var FlagsCnt: integer;
+
+    procedure CountAround(aX, aY: integer);
+    begin
+      if isValid(ax, ay) then
+      begin
+        if MineField[ax, ay].Flag then
+          inc(FlagsCnt)
+        else
+        if MineField[ax, ay].Covered then
+          anOpenList.Add(Point(ax, ay));
+      end;
+    end;
+
 begin
   result := false;
   FlagsCnt := 0;
   anOpenList.Clear;
-  if isValid(x - 1, y - 1) then
-  begin
-    if MineField[x - 1, y - 1].Flag then inc(FlagsCnt);
-    if MineField[x - 1, y - 1].Covered then anOpenList.Add(Point(x - 1, y - 1));
-  end;
+  CountAround(x - 1, y - 1);
+  CountAround(x    , y - 1);
+  CountAround(x + 1, y - 1);
 
-  if isValid(x, y - 1) then
-  begin
-    if MineField[x, y - 1].Flag then inc(FlagsCnt);
-    if MineField[x, y - 1].Covered then anOpenList.Add(Point(x, y - 1));
-  end;
+  CountAround(x - 1, y    );
+  CountAround(x + 1, y    );
 
-  if isValid(x + 1, y - 1) then
-  begin
-    if MineField[x + 1, y - 1].Flag then inc(FlagsCnt);
-    if MineField[x + 1, y - 1].Covered then anOpenList.Add(Point(x + 1, y - 1));
-  end;
-
-  if isValid(x - 1, y) then
-  begin
-    if MineField[x - 1, y].Flag then inc(FlagsCnt);
-    if MineField[x - 1, y].Covered then anOpenList.Add(Point(x - 1, y));
-  end;
-
-  if isValid(x + 1, y) then
-  begin
-    if MineField[x + 1, y].Flag then inc(FlagsCnt);
-    if MineField[x + 1, y].Covered then anOpenList.Add(Point(x + 1, y));
-  end;
-
-  if isValid(x - 1, y + 1) then
-  begin
-    if MineField[x - 1, y + 1].Flag then inc(FlagsCnt);
-    if MineField[x - 1, y + 1].Covered then anOpenList.Add(Point(x - 1, y + 1));
-  end;
-
-  if isValid(x, y + 1) then
-  begin
-    if MineField[x, y + 1].Flag then inc(FlagsCnt);
-    if MineField[x, y + 1].Covered then anOpenList.Add(Point(x, y + 1));
-  end;
-
-  if isValid(x + 1, y + 1) then
-  begin
-    if MineField[x + 1, y + 1].Flag then inc(FlagsCnt);
-    if MineField[x + 1, y + 1].Covered then anOpenList.Add(Point(x + 1, y + 1));
-  end;
+  CountAround(x - 1, y + 1);
+  CountAround(x    , y + 1);
+  CountAround(x + 1, y + 1);
 
   if MineField[x, y].Number = FlagsCnt then exit(true);
   if MineField[x, y].Number > FlagsCnt then exit(false);
-  PlaySound(csndWrong);
+  PlaySound(csndCheck);
   anOpenList.Clear;
 end;
+
+
+procedure TGameGridClass.ClearDownCheck(aForce:boolean = false);
+begin
+  for var x: integer := 0 to FGridData.Width - 1 do
+    for var y: integer := 0 to FGridData.Height - 1 do
+      MineField[x, y].DownCheck := false;
+  RenderField(aForce);
+end;
+
 
 constructor TGameGridClass.Create(aDrawForm: TForm);
 begin
@@ -197,6 +195,9 @@ begin
   FDrawForm := aDrawForm;
   FGridData.Ticks := 0;
   RenderGrid := TRenderGrid.Create;
+  GameSound := TSoundClass.Create;
+  GameSound.LoadSounds(csStyleDef);
+  FSettings.Init;
 end;
 
 
@@ -208,35 +209,47 @@ end;
 
 destructor TGameGridClass.Destroy;
 begin
-
+  FreeAndNil(GameSound);
   FreeAndNil(RenderGrid);
   inherited;
 end;
 
 
-procedure TGameGridClass.FieldCheck(X, Y: integer);
+function TGameGridClass.FieldCheck(X, Y: integer): boolean;
 var ToOpenList: TList<TPoint>;
+    Idx: integer;
 begin
+  result := false;
+  ClearDownCheck;
   if (MineField[x, y].Covered) or (MineField[x, y].Number = 0) then exit;
   ToOpenList := TList<TPoint>.Create;
   try
-    CheckAround(X, Y, ToOpenList);
+    var Res: boolean := CheckAround(X, Y, ToOpenList);
     if ToOpenList.Count = 0 then exit;
-    var Idx: integer;
-    for Idx := 0 to ToOpenList.Count - 1 do
-    begin
 
+    if Res then
+    begin
+      for Idx := ToOpenList.Count - 1 downto 0 do
+        if not MineField[ToOpenList[Idx].X, ToOpenList[Idx].Y].Mine then //Open tiles w/o mines
+        begin
+          //MineField[ToOpenList[Idx].X, ToOpenList[Idx].Y].Open;
+          CellClick(ToOpenList[Idx].X, ToOpenList[Idx].Y);
+          ToOpenList.Delete(Idx);
+        end;
+
+      if ToOpenList.Count > 0 then //Mines to explode            +
+      begin
+        for Idx := ToOpenList.Count - 1 downto 0 do
+          if not MineField[ToOpenList[Idx].X, ToOpenList[Idx].Y].Mine then
+        result := true;
+      end;
+      //RenderField;
     end;
 
   finally
+    RenderField(true);
     FreeAndNil(ToOpenList);
   end;
-end;
-
-
-procedure TGameGridClass.FieldCheckShow(X, Y: integer; Show: boolean);
-begin
-
 end;
 
 
@@ -260,8 +273,10 @@ end;
 procedure TGameGridClass.FieldMark(X, Y: integer);
 begin
   if not isValid(X, Y) then exit;
+  if not MineField[x, y].Covered then exit;
   MineField[x, y].ToRender := true;
   MineField[x, y].Flag := not MineField[x, y].Flag;
+  PlaySound(csndFlag);
   RecountFlags;
   RenderField;
 end;
@@ -378,11 +393,42 @@ begin
     begin
       newX := x + dX;
       newY := y + dY;
-      newX := IfThen(newX >= 0, newX mod (FGridData.Width  - 1), newX + (FGridData.Width  - 1));
-      newY := IfThen(newY >= 0, newY mod (FGridData.Height - 1), newY + (FGridData.Height - 1));
+      newX := IfThen(newX >= 0, newX mod (FGridData.Width  - 0), newX + (FGridData.Width  - 0));
+      newY := IfThen(newY >= 0, newY mod (FGridData.Height - 0), newY + (FGridData.Height - 0));
       MineField[newX, newY].Mine := DraftField.FCells[x, y] = 1;
     end;
   PrepareMineField;
+end;
+
+
+procedure TGameGridClass.SetDownCheck(X, Y: integer);
+
+  procedure SetDown(aX, aY: integer);
+  begin
+    if IsValid(aX, aY) and MineField[aX, aY].Covered and (not MineField[aX, aY].Flag) then
+    begin
+      MineField[aX, aY].DownCheck := true;
+      MineField[aX, aY].ToRender := true;
+    end;
+  end;
+
+begin
+  ClearDownCheck;
+
+  SetDown(x - 1, y - 1);
+  SetDown(x    , y - 1);
+  SetDown(x + 1, y - 1);
+
+  SetDown(x - 1, y    );
+  SetDown(x    , y    );
+  SetDown(x + 1, y    );
+
+  SetDown(x - 1, y + 1);
+  SetDown(x    , y + 1);
+  SetDown(x + 1, y + 1);
+
+  RenderField(true);
+  //DebugForm.ShowDebug(Self, 3);
 end;
 
 
@@ -396,7 +442,9 @@ end;
 
 function TGameGridClass.PlaySound(aSound: integer): boolean;
 begin
-
+  if not Settings.Sounds then exit;
+  if Settings.snd[aSound] then
+    GameSound.PlaySound(aSound);
 end;
 
 procedure TGameGridClass.PrepareMineField;
@@ -428,10 +476,10 @@ begin
 end;
 
 
-function TGameGridClass.RenderField: boolean;
+function TGameGridClass.RenderField(aForce: boolean = false): boolean;
 var Dummy: boolean;
 begin
-  result := RenderGrid.Render(MineField);
+  result := RenderGrid.Render(MineField, aForce);
   if result then
     if Assigned(FDrawForm) then
       FDrawForm.OnHelp(12345, 0, Dummy); //Lazy way to make callback

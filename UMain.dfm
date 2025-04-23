@@ -2422,6 +2422,7 @@ object FMain: TFMain
   Position = poScreenCenter
   OnCreate = FormCreate
   OnDestroy = FormDestroy
+  OnDeactivate = FormDeactivate
   OnHelp = FormHelp
   OnKeyUp = FormKeyUp
   OnPaint = FormPaint
@@ -2437,6 +2438,8 @@ object FMain: TFMain
     Margins.Bottom = 15
     Transparent = True
     OnMouseDown = imgGridMouseDown
+    OnMouseLeave = imgGridMouseLeave
+    OnMouseMove = imgGridMouseMove
     OnMouseUp = imgGridMouseUp
   end
   object pnlBottom: TPanel

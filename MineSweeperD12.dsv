@@ -1,8 +1,8 @@
 ﻿[ClosedView_RDpcUHJvamVjdHNcTWluZVN3ZWVwZXJcVU9wdGlvbnMucGFz]
 Module=D:\Projects\MineSweeper\UOptions.pas
-CursorX=18
-CursorY=142
-TopLine=127
+CursorX=31
+CursorY=56
+TopLine=33
 LeftCol=1
 Elisions=
 Bookmarks=
@@ -10,9 +10,9 @@ EditViewName=D:\Projects\MineSweeper\UOptions.pas
 
 [ClosedView_RDpcUHJvamVjdHNcTWluZVN3ZWVwZXJcVVV0aWxpdHkucGFz]
 Module=D:\Projects\MineSweeper\UUtility.pas
-CursorX=9
-CursorY=160
-TopLine=142
+CursorX=21
+CursorY=610
+TopLine=565
 LeftCol=1
 Elisions=
 Bookmarks=
@@ -30,9 +30,9 @@ EditViewName=D:\Projects\MineSweeper\UOptions.dfm
 
 [ClosedView_RDpcUHJvamVjdHNcTWluZVN3ZWVwZXJcVU1haW4ucGFz]
 Module=D:\Projects\MineSweeper\UMain.pas
-CursorX=103
-CursorY=13
-TopLine=1
+CursorX=75
+CursorY=285
+TopLine=165
 LeftCol=1
 Elisions=
 Bookmarks=
@@ -200,9 +200,9 @@ EditViewName=d:\program files (x86)\embarcadero\studio\23.0\SOURCE\VCL\Vcl.Forms
 
 [ClosedView_RDpcUHJvamVjdHNcTWluZVN3ZWVwZXJcVUdhbWVHcmlkLnBhcw==]
 Module=D:\Projects\MineSweeper\UGameGrid.pas
-CursorX=54
-CursorY=74
-TopLine=61
+CursorX=17
+CursorY=442
+TopLine=428
 LeftCol=1
 Elisions=
 Bookmarks=
@@ -250,9 +250,9 @@ EditViewName=d:\program files (x86)\embarcadero\studio\23.0\SOURCE\VCL\Vcl.Imagi
 
 [ClosedView_RDpcUHJvamVjdHNcTWluZVN3ZWVwZXJcVVJlbmRlckdyaWQucGFz]
 Module=D:\Projects\MineSweeper\URenderGrid.pas
-CursorX=22
-CursorY=16
-TopLine=1
+CursorX=1
+CursorY=127
+TopLine=59
 LeftCol=1
 Elisions=
 Bookmarks=
@@ -437,4 +437,54 @@ LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=
+
+[ClosedView_RDpcUHJvamVjdHNcTWluZVN3ZWVwZXJcVVNvdW5kLnBhcw==]
+Module=D:\Projects\MineSweeper\USound.pas
+CursorX=56
+CursorY=78
+TopLine=16
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=D:\Projects\MineSweeper\USound.pas
+[ClosedView_ZDpccHJvZ3JhbSBmaWxlcyAoeDg2KVxlbWJhcmNhZGVyb1xzdHVkaW9cMjMuMFxTT1VSQ0VcUlRM
+XFNZU1xTeXN0ZW0ucGFz]
+Module=d:\program files (x86)\embarcadero\studio\23.0\SOURCE\RTL\SYS\System.pas
+CursorX=12
+CursorY=25761
+TopLine=25740
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=
+[ClosedView_ZDpccHJvZ3JhbSBmaWxlcyAoeDg2KVxlbWJhcmNhZGVyb1xzdHVkaW9cMjMuMFxzb3VyY2VccnRs
+XGNvbW1vblxTeXN0ZW0uQ2xhc3Nlcy5wYXM=]
+Module=d:\program files (x86)\embarcadero\studio\23.0\source\rtl\common\System.Classes.pas
+CursorX=1
+CursorY=10355
+TopLine=10335
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=d:\program files (x86)\embarcadero\studio\23.0\source\rtl\common\System.Classes.pas
+
+[ClosedView_RDpcUHJvamVjdHNcTWluZVN3ZWVwZXJcVURlYnVnLnBhcw==]
+Module=D:\Projects\MineSweeper\UDebug.pas
+CursorX=9
+CursorY=59
+TopLine=31
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=D:\Projects\MineSweeper\UDebug.pas
+[ClosedView_ZDpccHJvZ3JhbSBmaWxlcyAoeDg2KVxlbWJhcmNhZGVyb1xzdHVkaW9cMjMuMFxTT1VSQ0VcVkNM
+XFZjbC5Db250cm9scy5wYXM=]
+Module=d:\program files (x86)\embarcadero\studio\23.0\SOURCE\VCL\Vcl.Controls.pas
+CursorX=40
+CursorY=1147
+TopLine=1130
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=d:\program files (x86)\embarcadero\studio\23.0\SOURCE\VCL\Vcl.Controls.pas
 

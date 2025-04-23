@@ -24,7 +24,7 @@ type
     procedure LoadRes(aStyle: string = csStyleDef);
   public
     procedure DEBUG_ShowMines;
-    function Render(var aGameGridCells: TGameGridCells): boolean;
+    function Render(var aGameGridCells: TGameGridCells; aForce: boolean = false): boolean;
     property FieldImage: TBitmap read FFieldImage;
     procedure Init(aGridData: TGridData; aStyle: string = csStyleDef);
     constructor Create;
@@ -33,7 +33,7 @@ type
 
 
 implementation
-
+uses UDebug;
 
 { TRenderGrid }
 
@@ -75,22 +75,23 @@ end;
 
 procedure TRenderGrid.LoadRes(aStyle: string = csStyleDef);
 begin
-  FGraph.LoadFromResourceName(HInstance, format(csStyleDef, [0]));
+  FGraph.LoadFromResourceName(HInstance, format(csResLoad, [aStyle, 'img', 0]));
   for var Idx: integer := Low(resImg) to High(resImg) do
-    resImg[Idx].LoadFromResourceName(HInstance, format(aStyle, [Idx]));
+    resImg[Idx].LoadFromResourceName(HInstance, format(csResLoad, [aStyle, 'img', Idx]));
 end;
 
 
-function TRenderGrid.Render(var aGameGridCells: TGameGridCells): boolean;
+function TRenderGrid.Render(var aGameGridCells: TGameGridCells; aForce: boolean = false): boolean;
 var DestRec, SrcRec: TRect;
+    x, y: integer;
 begin
   result := false;
-  for var y: integer := 0 to FGridData.Height - 1 do
-    for var x: integer := 0 to FGridData.Width - 1 do
+  for y := 0 to FGridData.Height - 1 do
+    for x := 0 to FGridData.Width - 1 do
     begin
       var Shd: integer := 0;
       DestRec := Rect(x * ccCellW, y * ccCellW, x * ccCellW + ccCellW, y * ccCellW + ccCellH);
-      if aGameGridCells[x, y].ToRender then
+      if aGameGridCells[x, y].ToRender or aForce then
       begin
         result := true;
         aGameGridCells[x, y].ToRender := false;
@@ -104,7 +105,7 @@ begin
           Continue;
         end;
 
-        if aGameGridCells[x, y].Covered then
+        if aGameGridCells[x, y].Covered and (not aGameGridCells[x, y].DownCheck) then
           SrcRec := Rect(Block * (ccCellW + 4) + 2 , ссTileY, Block * (ccCellW + 4) + 2 + ccCellW, ссTileY + ccCellH)
         else
           SrcRec := Rect(Block * (ccCellW + 4) + 2 , ссGridY, Block * (ccCellW + 4) + 2 + ccCellW, ссGridY + ccCellH);
@@ -117,13 +118,22 @@ begin
         end
         else
         begin
-          if aGameGridCells[x, y].Number > 0 then
+          if (aGameGridCells[x, y].Number > 0) then
             resImg[aGameGridCells[x, y].Number].Draw(FFieldImage.Canvas, DestRec);
-          if (y - 1 < 0) or (aGameGridCells[x, y - 1].Covered) then Shd := Shd + 1;
-          if (x - 1 < 0) or (aGameGridCells[x - 1, y].Covered) then Shd := Shd + 2;
+        end;
+
+        if (not aGameGridCells[x, y].Covered) or (aGameGridCells[x, y].DownCheck) then
+        begin
+          if (y - 1 < 0) or (aGameGridCells[x, y - 1].Covered and (not aGameGridCells[x, y - 1].DownCheck)) then Shd := Shd + 1;
+          if (x - 1 < 0) or (aGameGridCells[x - 1, y].Covered and (not aGameGridCells[x - 1, y].DownCheck)) then Shd := Shd + 2;
           if Shd > 0 then
             resImg[cixShad1 + Shd - 1].Draw(FFieldImage.Canvas, DestRec);
         end;
+//        if aGameGridCells[x, y].DownCheck then
+//        begin
+//          SrcRec := Rect(Block * (ccCellW + 4) + 2 , ссGridY, Block * (ccCellW + 4) + 2 + ccCellW, ссGridY + ccCellH);
+//          FFieldImage.Canvas.CopyRect(DestRec, FGraph.Canvas, SrcRec);
+//        end;
 
 //        if not aGameGridCells[x, y].Covered then
 //        begin
@@ -142,7 +152,7 @@ begin
       begin
         if aGameGridCells[x, y].Mine then
           //FFieldImage.Canvas.TextOut(x * ccCellW + 5, y * ccCellW + 5, 'X');
-          resImg[cixCross].Draw(FFieldImage.Canvas, DestRec);
+          resImg[cixMine].Draw(FFieldImage.Canvas, DestRec);
 
        //if aGameGridCells[x, y].Number > 0 then
        //   FFieldImage.Canvas.TextOut(x * ccCellW + 15, y * ccCellW + 15, IntToStr(aGameGridCells[x, y].Number));

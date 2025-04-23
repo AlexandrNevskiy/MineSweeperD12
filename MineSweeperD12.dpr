@@ -18,7 +18,9 @@ uses
   UOptions in 'UOptions.pas' {FOptions},
   UUtility in 'UUtility.pas',
   UGameGrid in 'UGameGrid.pas',
-  URenderGrid in 'URenderGrid.pas';
+  URenderGrid in 'URenderGrid.pas',
+  USound in 'USound.pas',
+  UDebug in 'UDebug.pas' {DebugForm};
 
 {$R *.res}
 
@@ -26,6 +28,7 @@ begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TFMain, FMain);
+  Application.CreateForm(TDebugForm, DebugForm);
   //Application.CreateForm(TFOptions, FOptions);
   Application.Run;
 end.
