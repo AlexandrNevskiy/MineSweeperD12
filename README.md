@@ -1,8 +1,8 @@
 
 TODO:
 
-1. ●●●●◌ Visually close to classic (new classic) Minesweeper
-2. ●●●●◌ Grid, Mines, Flags, Left-Right click
+1. ●●●●● Visually close to classic (new classic) Minesweeper
+2. ●●●●● Grid, Mines, Flags, Left-Right click
 3. ●●●●● Dificulty settings to Beginner, Intermediate, Advance and Custom grid size
 4. ●◌◌◌◌ High Score table (shared for all users on computer)
 5. ◌◌◌◌◌ Personal statistics (for each users)
@@ -10,6 +10,25 @@ TODO:
 7. ●●●●◌ Restore game at start
 8. ●●●●● Alghorithm to prevent First-Click-Loose
 9. ◌◌◌◌◌ Alghorithm to prevent "multi 8" at field generation (optional)
+
+10. ●●●●● Sounds 
+11. ●●●●● Sound configs
+12. ●●●●● Save/Restore settings
+13. ●◌◌◌◌ Loose condition
+14. ●◌◌◌◌ Win Condition
+
+---
+2025-04-23
+
+10. ●●●●● Sounds 
+11. ●●●●● Sound configs
+12. ●●●●● Save/Restore settings
+13. ●◌◌◌◌ Loose condition
+14. ●◌◌◌◌ Win Condition
+
+Sounds, sound config, Left-Right-Click check, Left-Right click detector based on WinAPI
+
+![image](https://github.com/user-attachments/assets/e0c87cc7-3897-41ac-8eba-506cfa85862b)
 
 ---
 2025-04-19
