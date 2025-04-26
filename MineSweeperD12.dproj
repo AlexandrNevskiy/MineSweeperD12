@@ -140,8 +140,8 @@
         <DCCReference Include="UGameGrid.pas"/>
         <DCCReference Include="URenderGrid.pas"/>
         <DCCReference Include="USound.pas"/>
-        <DCCReference Include="UDebug.pas">
-            <Form>DebugForm</Form>
+        <DCCReference Include="UStatistics.pas">
+            <Form>FStatistics</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <RcItem Include="Img\Mine.png">
@@ -222,22 +222,27 @@
             <ResourceType>WAV</ResourceType>
             <ResourceId>res_snd3</ResourceId>
         </RcItem>
-        <RcItem Include="Snd\Snd_Flag1.wav">
-            <ContainerId>ResourceItem</ContainerId>
-            <ResourceType>WAV</ResourceType>
-            <ResourceId>res_snd4</ResourceId>
-        </RcItem>
         <RcItem Include="Snd\Snd_Loose1.wav">
-            <ContainerId>ResourceItem</ContainerId>
-            <ResourceType>WAV</ResourceType>
-            <ResourceId>res_snd5</ResourceId>
-        </RcItem>
-        <RcItem Include="Snd\Snd_Success1.wav">
             <ContainerId>ResourceItem</ContainerId>
             <ResourceType>WAV</ResourceType>
             <ResourceId>res_snd6</ResourceId>
         </RcItem>
-        <RcItem Include="Snd\Snd_Check1.wav">
+        <RcItem Include="Snd\Snd_Success1.wav">
+            <ContainerId>ResourceItem</ContainerId>
+            <ResourceType>WAV</ResourceType>
+            <ResourceId>res_snd7</ResourceId>
+        </RcItem>
+        <RcItem Include="Snd\Snd_FlagIn.wav">
+            <ContainerId>ResourceItem</ContainerId>
+            <ResourceType>WAV</ResourceType>
+            <ResourceId>res_snd4</ResourceId>
+        </RcItem>
+        <RcItem Include="Snd\Snd_FlagOut.wav">
+            <ContainerId>ResourceItem</ContainerId>
+            <ResourceType>WAV</ResourceType>
+            <ResourceId>res_snd5</ResourceId>
+        </RcItem>
+        <RcItem Include="Snd\Snd_Check.wav">
             <ContainerId>ResourceItem</ContainerId>
             <ResourceType>WAV</ResourceType>
             <ResourceId>res_snd2</ResourceId>
@@ -390,7 +395,7 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="Snd\Snd_Check1.wav" Configuration="Debug" Class="ProjectFile">
+                <DeployFile LocalName="Snd\Snd_Check.wav" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Win32">
                         <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>
@@ -402,7 +407,13 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="Snd\Snd_Flag1.wav" Configuration="Debug" Class="ProjectFile">
+                <DeployFile LocalName="Snd\Snd_FlagIn.wav" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Snd\Snd_FlagOut.wav" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Win32">
                         <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>

@@ -1,6 +1,6 @@
 unit USound;
 ///
-/// MineSweeperD12 (RAD Programmer Challenge #1))
+/// MineSweeperD12 (RAD Programmer Challenge #1)
 ///
 /// Unit for paly sound
 ///
@@ -19,7 +19,7 @@ type
     procedure FreeSoundMemory;
   public
     function LoadSounds(aStyle: string): boolean;
-    function PlaySound(aSound: integer): boolean;
+    function PlaySounds(aSound: integer): boolean;
     constructor Create;
     destructor Destroy; override;
   end;
@@ -63,17 +63,16 @@ begin
     var Res: TResourceStream := TResourceStream.Create(HInstance, format(csResLoad, [aStyle, 'snd', Idx]), 'WAV');
     try
       Res.Position := 0;
-      //var P: Pointer;
       GetMem(FSounds[Idx], Res.Size);
       Res.Read(FSounds[Idx]^, Res.Size);
     finally
       FreeAndNil(Res);
     end;
-end;
+  end;
 end;
 
 
-function TSoundClass.PlaySound(aSound: integer): boolean;
+function TSoundClass.PlaySounds(aSound: integer): boolean;
 begin
   SndPlaySound(FSounds[aSound], SND_MEMORY or SND_ASYNC);
 end;

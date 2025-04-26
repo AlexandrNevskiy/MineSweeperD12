@@ -1,13 +1,11 @@
 program MineSweeperD12;
 ///
-/// MineSweeperD12 (RAD Programmer Challenge #1))
+/// MineSweeperD12 (RAD Programmer Challenge #1)
 ///
 /// Project file
 ///
 /// Alex Nevskiy 2025-04-09
 ///
-
-
 
 
 {$R *.dres}
@@ -20,15 +18,15 @@ uses
   UGameGrid in 'UGameGrid.pas',
   URenderGrid in 'URenderGrid.pas',
   USound in 'USound.pas',
-  UDebug in 'UDebug.pas' {DebugForm};
+  UStatistics in 'UStatistics.pas' {FStatistics};
 
-{$R *.res}
+{$R *.RES}
 
 begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TFMain, FMain);
-  Application.CreateForm(TDebugForm, DebugForm);
+  //Application.CreateForm(TFStatistics, FStatistics);
   //Application.CreateForm(TFOptions, FOptions);
   Application.Run;
 end.

@@ -1,6 +1,7 @@
 object FMain: TFMain
-  Left = 0
-  Top = 0
+  Left = -1000
+  Top = -1000
+  ActiveControl = pnlTime
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'MineSweeper (-)'
@@ -2419,13 +2420,17 @@ object FMain: TFMain
     00010000000000000001000080010000C0070000C0070000F01F0000F11F0000}
   KeyPreview = True
   Menu = MainMenu
-  Position = poScreenCenter
+  Position = poDesigned
+  Visible = True
+  OnActivate = FormActivate
+  OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnDeactivate = FormDeactivate
   OnHelp = FormHelp
   OnKeyUp = FormKeyUp
   OnPaint = FormPaint
+  OnShow = FormShow
   TextHeight = 15
   object imgGrid: TImage
     Left = 43
@@ -2842,21 +2847,6 @@ object FMain: TFMain
       TabOrder = 1
     end
   end
-  object pnlGrid_old: TPanel
-    AlignWithMargins = True
-    Left = 30
-    Top = 112
-    Width = 145
-    Height = 89
-    Margins.Left = 25
-    Margins.Top = 20
-    Margins.Right = 25
-    Margins.Bottom = 15
-    BevelOuter = bvLowered
-    BevelWidth = 2
-    TabOrder = 1
-    Visible = False
-  end
   object MainMenu: TMainMenu
     Left = 24
     Top = 32
@@ -2887,6 +2877,7 @@ object FMain: TFMain
     end
     object Help0: TMenuItem
       Caption = 'Help'
+      Visible = False
       object Help1: TMenuItem
         Action = actHelp
       end
@@ -2911,6 +2902,8 @@ object FMain: TFMain
       Category = 'ctgFile'
       Caption = 'Statistics'
       ShortCut = 115
+      Visible = False
+      OnExecute = actStatisticsExecute
     end
     object actOptions: TAction
       Category = 'ctgFile'
@@ -2921,10 +2914,12 @@ object FMain: TFMain
     object actVisual: TAction
       Category = 'ctgFile'
       Caption = 'Visual'
+      Visible = False
     end
     object actExit: TAction
       Category = 'ctgFile'
       Caption = 'Exit'
+      OnExecute = actExitExecute
     end
     object actHelp: TAction
       Category = 'ctgHelp'

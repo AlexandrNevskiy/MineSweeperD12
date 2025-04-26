@@ -17,7 +17,6 @@ type
   TFOptions = class(TForm)
     pnlDifficulty: TPanel;
     pnlDiffStandard: TPanel;
-    lblDiffCaption: TLabel;
     rbIntermed: TRadioButton;
     rbAdvanced: TRadioButton;
     rbCustom: TRadioButton;
@@ -34,8 +33,12 @@ type
     cbSnd3: TCheckBox;
     cbSnd2: TCheckBox;
     cbSnd4: TCheckBox;
-    cbSnd5: TCheckBox;
     cbSnd6: TCheckBox;
+    cbSnd7: TCheckBox;
+    lblDiffCaption: TLabel;
+    lblSettingsCaption: TLabel;
+    Bevel1: TBevel;
+    cbSnd5: TCheckBox;
     procedure rbClick(Sender: TObject);
     procedure CheckCustomControls;
     procedure EnableCustom(anEnable: boolean);

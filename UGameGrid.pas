@@ -1,6 +1,6 @@
 unit UGameGrid;
 ///
-/// MineSweeperD12 (RAD Programmer Challenge #1))
+/// MineSweeperD12 (RAD Programmer Challenge #1)
 ///
 /// Mine fieeld class
 ///
@@ -13,7 +13,7 @@ uses Classes, Graphics, SysUtils, Vcl.Imaging.Pngimage, Forms, Types, Generics.C
      UUtility, URenderGrid, USound;
 
 type
-  TGameState = (gsNew, {gsPrepared,} gsRestored, gsActive, gsWin, gsLoose);
+  TGameState = (gsNew, gsRestored, gsActive, gsSuccess, gsLoose);
 
   TGameGridClass = class
     FGameState: TGameState;
@@ -30,41 +30,44 @@ type
   private
     procedure ScrollToCell(toX, toY: integer); //+
     procedure PrepareMineField; //+
-    procedure RecountFlags; //+
-    procedure CellClick(X, Y: integer);
+    procedure CellClick(X, Y: integer; ClickSound: boolean = true);
     function CheckAround(X, Y: integer; anOpenList: TList<TPoint>): boolean;
   public
     Input: TInput;
+    procedure RecountFlags; //+
     function PlaySound(aSound: integer): boolean;
     function isValid(X, Y: integer): boolean; overload;
     function IsValid(aPoint: TPoint): boolean; overload;
     procedure FieldClick(X, Y: integer); //On Left Click
     procedure FieldMark (X, Y: integer); //On Righ Click
     function FieldCheck(X, Y: integer): boolean; //On Left-Righ Click     (MouseUp)
-    //procedure FieldCheckShow(X, Y: integer; Show: boolean); //On Left-Righ Click (MouseDown)
     procedure SetDownCheck(X, Y: integer); //On Left-Righ Click (MouseDown)
     procedure ClearDownCheck(aForce:boolean = false);
     procedure Init(aGridData: TGridData); //+
+    function IsSaveExists: boolean;
     function LoadFromFile: boolean; //+
     function SaveToFile: boolean;   //+
     function Mines_Flags: integer; //+
-    function TimerCount: integer;  //?
+    function TimerCount: integer;  //+
     function RenderField(aForce: boolean = false): boolean;
+    procedure RenderLoose;
+    procedure RenderSuccess;
     property GameState: TGameState read FGameState;
     property Settings: TSettings read FSettings write FSettings;
-    procedure DEBUG_ShowMines;
+    function DetectSuccess: boolean;
+
     constructor Create(aDrawForm: TForm);
     destructor Destroy; override;
   end;
 
 implementation
 
-uses ZLib, StrUtils, Math, Windows, IOUtils, UDebug;
+uses Controls, Dialogs, ZLib, StrUtils, Math, Windows, IOUtils;
 
 
 { TGameGridClass }
 
-procedure TGameGridClass.CellClick(X, Y: integer);
+procedure TGameGridClass.CellClick(X, Y: integer; ClickSound: boolean = true);
 var ToOpen: TList<TPoint>;
     Proceed, Start, Stop, Idx: integer;
 
@@ -87,10 +90,16 @@ var ToOpen: TList<TPoint>;
 
 begin
   if not isValid(X, Y) then exit;
-  If MineField[X, Y].Mine then ;//BOOM!
+  If MineField[X, Y].Mine then //BOOM!
+  begin
+    MineField[X, Y].Checked := true;
+    FGameState := gsLoose;
+    exit;
+  end;
   If MineField[X, Y].Number > 0 then
   begin
-    PlaySound(csndClick);
+    if ClickSound then
+      PlaySound(csndClick);
     MineField[X, Y].Open;
     if isValid(X, Y + 1) then MineField[X, Y + 1].ToRender := true; //Redraw grid to remove shadow
     if isValid(X + 1, Y) then MineField[X + 1, Y].ToRender := true; //Redraw grid to remove shadow
@@ -140,6 +149,7 @@ begin
     end;
   end;
   RenderField;
+  DetectSuccess;
 end;
 
 
@@ -201,12 +211,6 @@ begin
 end;
 
 
-procedure TGameGridClass.DEBUG_ShowMines;
-begin
-  RenderGrid.DEBUG_ShowMines;
-  RenderField;
-end;
-
 destructor TGameGridClass.Destroy;
 begin
   FreeAndNil(GameSound);
@@ -215,12 +219,35 @@ begin
 end;
 
 
+function TGameGridClass.DetectSuccess: boolean;
+var FlaggedMines: integer;
+    CoveredMines: integer;
+begin
+  result := false;
+  FlaggedMines := 0;
+  CoveredMines := 0;
+  for var x: integer := 0 to FGridData.Width - 1 do
+    for var y: integer := 0 to FGridData.Height - 1 do
+    begin
+      if (MineField[x, y].Covered) and (not MineField[x, y].Mine) then exit(false);  //Not opened all tiles w/o mines
+      if (MineField[x, y].Covered) and (MineField[x, y].Mine) and (MineField[x, y].Flag) then inc(FlaggedMines);
+      if (MineField[x, y].Covered) and (MineField[x, y].Mine) and (not MineField[x, y].Flag) then inc(CoveredMines);
+    end;
+  result := FlaggedMines + CoveredMines = FGridData.Mines;
+  if result then
+  begin
+    FGameState := gsSuccess;
+    Flags := FGridData.Mines;
+  end;
+end;
+
+
 function TGameGridClass.FieldCheck(X, Y: integer): boolean;
 var ToOpenList: TList<TPoint>;
     Idx: integer;
 begin
   result := false;
-  ClearDownCheck;
+  ClearDownCheck(true);
   if (MineField[x, y].Covered) or (MineField[x, y].Number = 0) then exit;
   ToOpenList := TList<TPoint>.Create;
   try
@@ -229,23 +256,22 @@ begin
 
     if Res then
     begin
+      PlaySound(csndCheck);
       for Idx := ToOpenList.Count - 1 downto 0 do
         if not MineField[ToOpenList[Idx].X, ToOpenList[Idx].Y].Mine then //Open tiles w/o mines
         begin
-          //MineField[ToOpenList[Idx].X, ToOpenList[Idx].Y].Open;
-          CellClick(ToOpenList[Idx].X, ToOpenList[Idx].Y);
+          CellClick(ToOpenList[Idx].X, ToOpenList[Idx].Y, false);
           ToOpenList.Delete(Idx);
         end;
 
       if ToOpenList.Count > 0 then //Mines to explode            +
       begin
         for Idx := ToOpenList.Count - 1 downto 0 do
-          if not MineField[ToOpenList[Idx].X, ToOpenList[Idx].Y].Mine then
+          MineField[ToOpenList[Idx].X, ToOpenList[Idx].Y].Checked := true;
+        FGameState := gsLoose;
         result := true;
       end;
-      //RenderField;
     end;
-
   finally
     RenderField(true);
     FreeAndNil(ToOpenList);
@@ -275,8 +301,16 @@ begin
   if not isValid(X, Y) then exit;
   if not MineField[x, y].Covered then exit;
   MineField[x, y].ToRender := true;
-  MineField[x, y].Flag := not MineField[x, y].Flag;
-  PlaySound(csndFlag);
+  if MineField[x, y].Flag then
+  begin
+    PlaySound(csndFlagOut);
+    MineField[x, y].Flag := false;
+  end
+  else
+  begin
+    PlaySound(csndFlagIn);
+    MineField[x, y].Flag := true;
+  end;
   RecountFlags;
   RenderField;
 end;
@@ -293,6 +327,13 @@ begin
       MineField[x, y].Init;
   FGameState := gsNew;
   RenderField;
+end;
+
+
+function TGameGridClass.IsSaveExists: boolean;
+begin
+  var FileName: string := GetSaveFileName(FGridData);
+  result := FileExists(FileName);
 end;
 
 
@@ -317,26 +358,28 @@ var TMS: TMemoryStream;
     aVer: string[3];
 begin
   result := false;
+  aVer := '   ';
   aFileName := GetSaveFileName(FGridData);
   if not FileExists(aFileName) then exit;
   TMS := TMemoryStream.Create;
   try
-    FS := TFileStream.Create(aFileName, fmCreate);
+    FS := TFileStream.Create(aFileName, fmOpenRead);
     try
-      LZip := TZDecompressionStream(FS);
+      LZip := TZDecompressionStream.Create(FS);
       try
         TMS.CopyFrom(LZip, 0);
-        TMS.Read(aVer, SizeOf(cSaveVer));
-        if not SameText(aVer, cSaveVer) then exit(false);
-        TMS.Read(FGridData, SizeOf(FGridData));
-        for var x: integer := 0 to FGridData.Width - 1 do
-          for var y: integer := 0 to FGridData.Height - 1 do
-            TMS.Read(MineField[x, y], SizeOf(MineField[x, y]));
-        FGameTicks := Windows.GetTickCount64 - FGridData.Ticks;
-        result := true;
       finally
         FreeAndNil(LZip);
       end;
+      TMS.Position := 0;
+      TMS.Read(aVer[1], ByteLength(cSaveVer));
+      if not SameText(aVer, cSaveVer) then exit(false);
+      TMS.Read(FGridData, SizeOf(FGridData));
+      for var x: integer := 0 to FGridData.Width - 1 do
+        for var y: integer := 0 to FGridData.Height - 1 do
+          TMS.Read(MineField[x, y], SizeOf(MineField[x, y]));
+      FGameTicks := Windows.GetTickCount64 - FGridData.Ticks;
+      result := true;
     finally
       FreeAndNil(FS);
     end;
@@ -344,7 +387,10 @@ begin
     FreeAndNil(TMS);
   end;
   if result then
-   // TFile.Delete(aFileName);
+  begin
+    FGameState := gsActive;
+    TFile.Delete(aFileName);
+  end;
 end;
 
 
@@ -359,11 +405,12 @@ begin
   try
     TMS.Clear;
     TMS.Position := 0;
-    TMS.Write(cSaveVer, SizeOf(cSaveVer));
+    TMS.Write(cSaveVer[1], ByteLength(cSaveVer));
     TMS.Write(FGridData, SizeOf(FGridData));
     for var x: integer := 0 to FGridData.Width - 1 do
       for var y: integer := 0 to FGridData.Height - 1 do
         TMS.Write(MineField[x, y], SizeOf(MineField[x, y]));
+    TMS.Position := 0;
     FS := TFileStream.Create(GetSaveFileName(FGridData), fmCreate);
     try
       LZip := TZCompressionStream.Create(clDefault, FS);
@@ -428,7 +475,6 @@ begin
   SetDown(x + 1, y + 1);
 
   RenderField(true);
-  //DebugForm.ShowDebug(Self, 3);
 end;
 
 
@@ -436,7 +482,7 @@ function TGameGridClass.Mines_Flags: integer;
 begin
   result := FGridData.Mines - Flags;
   if result < -99 then
-    result := -99
+    result := -99;
 end;
 
 
@@ -444,8 +490,9 @@ function TGameGridClass.PlaySound(aSound: integer): boolean;
 begin
   if not Settings.Sounds then exit;
   if Settings.snd[aSound] then
-    GameSound.PlaySound(aSound);
+    GameSound.PlaySounds(aSound);
 end;
+
 
 procedure TGameGridClass.PrepareMineField;
 begin
@@ -486,10 +533,23 @@ begin
 end;
 
 
+procedure TGameGridClass.RenderLoose;
+begin
+  RenderGrid.RenderLoose(MineField);
+end;
+
+
+procedure TGameGridClass.RenderSuccess;
+begin
+  RenderGrid.RenderSuccess(MineField);
+end;
+
+
 function TGameGridClass.TimerCount: integer;
 begin
-  if GameState <> gsActive then exit(0);
-  FGridData.Ticks := Windows.GetTickCount64 - FGameTicks;
+  if GameState = gsNew then exit(0);
+  if GameState in [gsLoose, gsSuccess] then exit((FGridData.Ticks) div 1000);  //Freeze timer for Loose/Success
+  FGridData.Ticks := Windows.GetTickCount64 - FGameTicks;  //Games timer based on system timer
   result := (FGridData.Ticks) div 1000;
 end;
 

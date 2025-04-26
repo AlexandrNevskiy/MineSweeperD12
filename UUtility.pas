@@ -1,6 +1,6 @@
 ﻿unit UUtility;
 ///
-/// MineSweeperD12 (RAD Programmer Challenge #1))
+/// MineSweeperD12 (RAD Programmer Challenge #1)
 ///
 /// Utility dump^W unit
 ///
@@ -17,11 +17,11 @@ type
     function IsInRange(aValue: integer): boolean;
   end;
 
-  TMouseButtoState = (mbsNone, mbsDown, mbsPressed, mbsUp);
+  //TMouseButtoState = (mbsNone, mbsDown, mbsPressed, mbsUp);
 
   TInput = record
-    OldL: TMouseButtoState;
-    OldR: TMouseButtoState;
+    //OldL: TMouseButtoState;
+    //OldR: TMouseButtoState;
     //function UpdateState(anOldstate: TMouseButtoState; aNew: boolean): TMouseButtoState;
   public
     //LButton: TMouseButtoState;
@@ -45,10 +45,11 @@ const
   csndArea  = 1;
   csndCheck = 2;
   csndClick = 3;
-  csndFlag =  4;
-  csndLoose = 5;
-  csndSuccess = 6;
-  csndMax = 6;
+  csndFlagIn  = 4;
+  csndFlagOut = 5;
+  csndLoose = 6;
+  csndSuccess = 7;
+  csndMax = 7;
 
 type
   TSettings = record
@@ -64,20 +65,28 @@ type
     //GridType: integer; // 0=Custom 1=Beginner 2=Intermed 3=Advanced etc for future
     GridData :TGridData;
     FileName: string;
+    Left: integer;
+    Top: integer;
     //Statistics
-    GamesPlayed: integer;
-    GamesWon: integer;
-    LongestWinningStreak: integer; // TODO
-    LongestLosinggStreak: integer; //
-    CurrentStreak: integer;        //
+    //GamesPlayed: integer;
+    //GamesWon: integer;
+    //LongestWinningStreak: integer; // TODO
+    //LongestLosinggStreak: integer; //
+    //CurrentStreak: integer;        //
     Settings: TSettings;
     function GetParamsFileName(ForceCreateDir: boolean = true): string;
-    procedure LoadParams;
+    function LoadParams: boolean;
     procedure SaveParams;
     procedure LoadSettings;
     procedure SaveSettings;
     procedure Init;
-    constructor Create(aForce: boolean);
+    constructor Create(aForce: boolean; aLeft, aTop: integer);
+  end;
+
+  TStats = record
+    GamesPlayed: integer;
+    GamesWon: integer;
+
   end;
 
 type
@@ -119,12 +128,31 @@ type
 
   TGameGridCells = array of array of TGameGridCell;
 
-
+//const
+//  cbtMax = 5; //Best times count
+//  cbtKeySize = 3;
+type
   THighScore = class
     FScoreList: TStringList;
   private
+    //arBestTimes: array [1..cbtMax] of string;
+    GamesPlayed: integer;
+    GamesWon: integer;
+    LastGame: integer; //::AN 2025-04-25 -1=Loose; 0=Current; +1=Success
+    StreakCurrent: integer;
+    StreakWon: integer;
+    StreakLoose: integer;
     function GetHighScoreFileName: string;
+    procedure AddKeys;
+    procedure RemoveKeys;
+    function LoadHighScore(aDiff: integer): boolean; // true = highscore file/section exists
+    procedure SaveHighScore(aDiff: integer);
   public
+    procedure Init(aDiff: integer);
+    procedure PlayedGame(aDiff: integer);
+    procedure LooseGame(aDiff: integer);
+    procedure WonGame(aDiff: integer; aTime: integer);
+
     constructor Create;
     destructor Destroy; override;
   end;
@@ -142,10 +170,19 @@ const
   cptSaveCustom = 'Custom.sav';
 
   cssParams = 'Params';
-  cssStats = 'Statistics';
+  cssForm = 'Form';
+  //cssStats = 'Statistics';
   cssSettings = 'Settings';
+  cssBeginner = 'Beginner';
+  cssIntermed = 'Intermed';
+  cssAdvanced = 'Advanced';
+  cssBestTimes = 'BT';
+  cssKey = '%2.2d';
+  cbtMax = 5; //Best times count
+  cbtKeySize = 3;
 
   csFormCaption = 'MineSweeper (%s)';
+  csStatFormCaption = 'MinesweeperD12 Statistics - %s';
   csDiffLabel = '  %s'#13#10'  %d mines'#13#10'  %d x %d tile grid';
 
   //csStyleDef = 'res%d';
@@ -193,8 +230,6 @@ function GetSaveFileName(aGridData: TGridData): string;
 function GenSeed: integer;
 
 
-//function NumbersOnly(aString: string): string;
-
 implementation
 
 uses Winapi.Windows, StrUtils, IniFiles, Math, Generics.Collections;
@@ -238,23 +273,6 @@ begin
 end;
 
 
-//function NumbersOnly(aString: string): string;
-//begin
-//  result := '';
-//  if aString = '' then exit;
-//  for var Idx: integer := 1 to Length(aString) do
-//    If aString[Idx] in ['0'..'9'] then
-//      result := result + aString[Idx];
-//end;
-
-//function GetParamsFileName: string;
-//begin
-//  result := IncludeTrailingPathDelimiter(GetEnvironmentVariable('APPDATA')); //Params local for each user
-//  result := IncludeTrailingPathDelimiter(result + cptProgramDataFolder);
-//  result := result + cptParamsFileName;
-//  //ex: "C:\Users\Alex\AppData\Roaming\MineSweeperD12\Settings.txt"
-//end;
-
 { TRange }
 
 function TRange.IsInRange(aValue: integer): boolean;
@@ -268,6 +286,7 @@ end;
 constructor THighScore.Create;
 begin
   FScoreList := TStringList.Create;
+  FScoreList.Duplicates := dupAccept;
 end;
 
 
@@ -280,18 +299,138 @@ end;
 
 function THighScore.GetHighScoreFileName: string;
 begin
-  result := IncludeTrailingPathDelimiter(GetEnvironmentVariable('ALLUSERSPROFILE')); //High Score table for all users
+  result := IncludeTrailingPathDelimiter(GetEnvironmentVariable('APPDATA')); //High Score table for each users
   result := IncludeTrailingPathDelimiter(result + cptProgramDataFolder);
   result := result + cptHighScoreFileName;
-  //ex: "C:\Users\All Users\MineSweeperD12\HighScore.txt"
+  //ex: "C:\Users\Alex\AppData\Roaming\MineSweeperD12\HighScore.txt"
+end;
+
+
+procedure THighScore.Init(aDiff: integer);
+begin
+  GamesPlayed := 0;
+  GamesWon := 0;
+  LastGame := 0; //::AN 2025-04-25 -1=Loose; 0=Current; +1=Success
+  StreakCurrent := 0;
+  StreakWon := 0;
+  StreakLoose := 0;
+  //for var Idx := Low(arBestTimes) to High(arBestTimes) do
+  //  arBestTimes[Idx] := '-           ---';
+  FScoreList.Clear;
+end;
+
+
+function THighScore.LoadHighScore(aDiff: integer): boolean;
+var SectionName: string;
+begin
+  if aDiff = 0 then exit;
+  var FileName: string := GetHighScoreFileName;
+  result := FileExists(FileName);
+  case aDiff of
+    1: SectionName := cssIntermed;
+    2: SectionName := cssAdvanced;
+  else SectionName := cssBeginner;
+  end;
+
+  var IniFile := TMemIniFile.Create(FileName);
+  try
+    GamesPlayed := IniFile.ReadInteger(SectionName, 'GamesPlayed', GamesPlayed);
+    GamesWon    := IniFile.ReadInteger(SectionName, 'GamesWon', GamesWon);
+    LastGame    := IniFile.ReadInteger(SectionName, 'LastGame', LastGame);
+    StreakCurrent := IniFile.ReadInteger(SectionName, 'StreakCurrent', StreakCurrent);
+    StreakWon     := IniFile.ReadInteger(SectionName, 'StreakWon', StreakWon);
+    StreakLoose   := IniFile.ReadInteger(SectionName, 'StreakLoose', StreakLoose);
+
+    if IniFile.SectionExists(SectionName + cssBestTimes) then
+    begin
+      IniFile.ReadSectionValues(SectionName + cssBestTimes, FScoreList);
+      FScoreList.Sort;
+      RemoveKeys;
+    end
+    else
+      FScoreList.Clear;
+  finally
+    FreeAndNil(IniFile);
+  end;
+end;
+
+
+procedure THighScore.LooseGame(aDiff: integer);
+begin
+  if aDiff = 0 then exit;
+end;
+
+
+procedure THighScore.PlayedGame(aDiff: integer);
+begin
+  if aDiff = 0 then exit;
+  //cssBeginner = 'Beginner';
+  //cssIntermed = 'Intermed';
+  //cssAdvanced = 'Advanced';
+end;
+
+procedure THighScore.AddKeys;
+begin
+  if FScoreList.Count = 0 then exit;
+  FScoreList.Sort;
+
+end;
+
+
+procedure THighScore.RemoveKeys;
+begin
+  if FScoreList.Count = 0 then exit;
+  FScoreList.Sort;
+  for var Idx := 0 to FScoreList.Count - 1 do
+    FScoreList[Idx] := Copy(FScoreList[Idx], cbtKeySize, Length(FScoreList[Idx]));
+end;
+
+
+procedure THighScore.SaveHighScore(aDiff: integer);
+var SectionName: string;
+begin
+  if aDiff = 0 then exit;
+  case aDiff of
+    1: SectionName := cssIntermed;
+    2: SectionName := cssAdvanced;
+  else SectionName := cssBeginner;
+  end;
+
+  var IniFile := TMemIniFile.Create(GetHighScoreFileName);
+  try
+    IniFile.WriteInteger(SectionName, 'GamesPlayed', GamesPlayed);
+    IniFile.WriteInteger(SectionName, 'GamesWon',    GamesWon);
+    IniFile.WriteInteger(SectionName, 'LastGame',    LastGame);
+    IniFile.WriteInteger(SectionName, 'StreakCurrent', StreakCurrent);
+    IniFile.WriteInteger(SectionName, 'StreakWon',     StreakWon);
+    IniFile.WriteInteger(SectionName, 'StreakLoose',   StreakLoose);
+
+    if FScoreList.Count = 0 then exit;
+
+    FScoreList.Sort;
+    for var Idx := 0 to FScoreList.Count - 1 do
+      IniFile.WriteString(SectionName + cssBestTimes, format(cssKey, [Idx]), FScoreList[Idx]);
+
+  finally
+    IniFile.UpdateFile;
+    FreeAndNil(IniFile);
+  end;
+
+end;
+
+
+procedure THighScore.WonGame(aDiff, aTime: integer);
+begin
+  if aDiff = 0 then exit;
 end;
 
 
 { TLocalParams }
 
-procedure TLocalParams.LoadParams;
+function TLocalParams.LoadParams: boolean;
 var IniFile: TMemIniFile;
 begin
+  result := false;
   Settings.LoadFromIni(FileName);
   IniFile := TMemIniFile.Create(FileName);
   try
@@ -300,12 +439,18 @@ begin
     GridData.Width  := IniFile.ReadInteger(cssParams, 'GridWidth', 9);
     GridData.Height := IniFile.ReadInteger(cssParams, 'GridHeight', 9);
     GridData.Mines  := IniFile.ReadInteger(cssParams, 'GridMines', 10);
+    //Form
+    var OldLeft: integer := Left;
+    var OldTop: integer := Top;
+    Left := IniFile.ReadInteger(cssForm, 'Left', Left);
+    Top  := IniFile.ReadInteger(cssForm, 'Top',  Top);
+    result := (OldLeft = Left) and (OldTop = Top);
     //Statistics
-    GamesPlayed := IniFile.ReadInteger(cssStats, 'GamesPlayed', 0);
-    GamesWon    := IniFile.ReadInteger(cssStats, 'GamesWon', 0);
-    LongestWinningStreak  := IniFile.ReadInteger(cssStats, 'LongestWinningStreak', 0);
-    LongestLosinggStreak  := IniFile.ReadInteger(cssStats, 'LongestLosinggStreak', 0);
-    CurrentStreak  := IniFile.ReadInteger(cssStats, 'CurrentStreak', 0);
+    //GamesPlayed := IniFile.ReadInteger(cssStats, 'GamesPlayed', 0);
+    //GamesWon    := IniFile.ReadInteger(cssStats, 'GamesWon', 0);
+    //LongestWinningStreak  := IniFile.ReadInteger(cssStats, 'LongestWinningStreak', 0);
+    //LongestLosinggStreak  := IniFile.ReadInteger(cssStats, 'LongestLosinggStreak', 0);
+    //CurrentStreak  := IniFile.ReadInteger(cssStats, 'CurrentStreak', 0);
   finally
     FreeAndNil(IniFile);
   end;
@@ -317,6 +462,7 @@ begin
   Settings.LoadFromIni(FileName);
 end;
 
+
 procedure TLocalParams.SaveParams;
 var IniFile: TMemIniFile;
 begin
@@ -327,12 +473,15 @@ begin
     IniFile.WriteInteger(cssParams, 'GridWidth', GridData.Width);
     IniFile.WriteInteger(cssParams, 'GridHeight', GridData.Height);
     IniFile.WriteInteger(cssParams, 'GridMines', GridData.Mines);
+    //Form
+    IniFile.WriteInteger(cssForm, 'Left', Left);
+    IniFile.WriteInteger(cssForm, 'Top',  Top);
     //Statistics
-    IniFile.WriteInteger(cssStats, 'GamesPlayed', GamesPlayed);
-    IniFile.WriteInteger(cssStats, 'GamesWon', GamesWon);
-    IniFile.WriteInteger(cssStats, 'LongestWinningStreak', LongestWinningStreak);
-    IniFile.WriteInteger(cssStats, 'LongestLosinggStreak', LongestLosinggStreak);
-    IniFile.WriteInteger(cssStats, 'CurrentStreak', CurrentStreak);
+    //IniFile.WriteInteger(cssStats, 'GamesPlayed', GamesPlayed);
+    //IniFile.WriteInteger(cssStats, 'GamesWon', GamesWon);
+    //IniFile.WriteInteger(cssStats, 'LongestWinningStreak', LongestWinningStreak);
+    //IniFile.WriteInteger(cssStats, 'LongestLosinggStreak', LongestLosinggStreak);
+    //IniFile.WriteInteger(cssStats, 'CurrentStreak', CurrentStreak);
     IniFile.UpdateFile;
   finally
     FreeAndNil(IniFile);
@@ -345,8 +494,10 @@ begin
   Settings.SaveToIni(FileName);
 end;
 
-constructor TLocalParams.Create(aForce: boolean); //Trick to use Adv Record constructor
+constructor TLocalParams.Create(aForce: boolean; aLeft, aTop: integer); //Trick to use Adv Record constructor
 begin
+  Left := aLeft;
+  Top  := aTop;
   FileName := GetParamsFileName;
   Init;
   if FileExists(GetParamsFileName) then
@@ -369,11 +520,11 @@ procedure TLocalParams.Init;
 begin
   GridData := cgdBeginner;
   //Statistics
-  GamesPlayed := 0;          //
-  GamesWon := 0;             //
-  LongestWinningStreak := 0; // TODO
-  LongestLosinggStreak := 0; //
-  CurrentStreak :=0 ;        //
+  //GamesPlayed := 0;          //
+  //GamesWon := 0;             //
+  //LongestWinningStreak := 0; // TODO
+  //LongestLosinggStreak := 0; //
+  //CurrentStreak :=0 ;        //
 end;
 
 { TGameGrid }
