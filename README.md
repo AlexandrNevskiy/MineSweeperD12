@@ -17,6 +17,44 @@ TODO:
 14. ●●●●● Win Condition
 15. ●●●●◌ Final polishing and testing
 
+<details><summary>Behind the scenes</summary>
+
+Gradient
+
+A set of 30 images of varying brightness is used to display tiles. When the playing field is initialized, a Gradient Field is generated - it matches the size of the playing field and in each cell contains tile indices that will be used to draw the main field.
+To build a rectangular gradient:
+1. The sum of the length and width of the playing field is taken - we get a one-dimensional size onto which a set of 30 tiles is superimposed. To keep the playing field as dark as possible, if this size is less than 30, then it is used to index the tiles, and starts with the darkest one.
+2. Having interpolated data, you can get gradient values ​​for the upper right and lower left corners.
+3. The rest of the field is filled with sequential interpolation of each column.
+
+![image](https://github.com/user-attachments/assets/b6bbf9e7-e1f4-4a06-88eb-b8c63026162f)
+
+---
+
+Safe first click
+
+Initially, a draft field is created, the same size as the main playing field. Its center is found and, depending on the specified dimensions, a zone is created that is prohibited for generating mines. (for example, 1/5 of the field size, but not less than 3x3)
+After this, the coordinates of all other cells are entered into the list.
+Next, a random index is selected in the list. According to this index, coordinates are taken from the list and a mine is placed in them. The entry just selected is removed from the list.
+The required number of times (depending on the total number of mines required for generation) is repeated in a cycle. This is guaranteed to create the required number of mines in the guaranteed time.
+After this, the game goes into the first click wait mode.
+
+![image](https://github.com/user-attachments/assets/db78c4f3-ae56-411a-baae-7ac3aeaedeee)
+
+Let's say (for ease of explanation), the player clicked on a tile that is highlighted in color.
+
+![image](https://github.com/user-attachments/assets/fbe02413-31b2-4901-9ce4-e3201e61881f)
+
+For this place, the horizontal and vertical offset value is calculated and the entire draft field is rewritten into the playing field with this offset, placing a safe zone under the player's click.
+
+![image](https://github.com/user-attachments/assets/54a06b1a-37ee-49dc-8705-9f129ced313b)
+
+
+
+
+</details> 
+
+
 ---
 2025-04-26 2<br/>
 
