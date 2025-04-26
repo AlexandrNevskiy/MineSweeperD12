@@ -136,23 +136,28 @@ type
     FScoreList: TStringList;
   private
     //arBestTimes: array [1..cbtMax] of string;
-    GamesPlayed: integer;
-    GamesWon: integer;
-    LastGame: integer; //::AN 2025-04-25 -1=Loose; 0=Current; +1=Success
-    StreakCurrent: integer;
-    StreakWon: integer;
-    StreakLoose: integer;
+    //StreakCurrent: integer;
     function GetHighScoreFileName: string;
-    procedure AddKeys;
-    procedure RemoveKeys;
-    function LoadHighScore(aDiff: integer): boolean; // true = highscore file/section exists
+    //ocedure AddKeys;
+    //ocedure RemoveKeys;
+
     procedure SaveHighScore(aDiff: integer);
   public
+    GamesPlayed: integer;
+    GamesWon: integer;
+    LastGame: integer; //::AN 2025-04-25 -X=Loose; 0=New install; +X=Success
+    StreakWon: integer;
+    StreakLoose: integer;
     procedure Init(aDiff: integer);
-    procedure PlayedGame(aDiff: integer);
+    //procedure PlayedGame(aDiff: integer);
     procedure LooseGame(aDiff: integer);
     procedure WonGame(aDiff: integer; aTime: integer);
 
+    function BestTime_Time(anIndex: integer = 0): string;
+    function BestTime_Date(anIndex: integer = 0): string;
+    function Percentage: integer;
+    function CurrDate: string;
+    procedure LoadHighScore(aDiff: integer);
     constructor Create;
     destructor Destroy; override;
   end;
@@ -177,7 +182,7 @@ const
   cssIntermed = 'Intermed';
   cssAdvanced = 'Advanced';
   cssBestTimes = 'BT';
-  cssKey = '%2.2d';
+  cssKey = '%2.2d_';
   cbtMax = 5; //Best times count
   cbtKeySize = 3;
 
@@ -228,6 +233,7 @@ const
 function GetCurrentUser: string;
 function GetSaveFileName(aGridData: TGridData): string;
 function GenSeed: integer;
+function HSSort(List: TStringList; Index1, Index2: Integer): Integer; //::AN 2025-04-25 Custom sort for High Score
 
 
 implementation
@@ -273,6 +279,14 @@ begin
 end;
 
 
+function HSSort(List: TStringList; Index1, Index2: Integer): Integer; //::AN 2025-04-25 Sort list by value then key
+begin
+  result := StrToIntDef(List.ValueFromIndex[Index1], 0) - StrToIntDef(List.ValueFromIndex[Index2], 0);
+  if result = 0 then
+    result := trunc(StrToFloatDef(List.Names[Index1], 0) - StrToFloatDef(List.Names[Index2], 0));
+end;
+
+
 { TRange }
 
 function TRange.IsInRange(aValue: integer): boolean;
@@ -283,10 +297,41 @@ end;
 
 { THighScore }
 
+function THighScore.BestTime_Date(anIndex: integer = 0): string;
+begin
+  result := 'N/A';
+  if FScoreList.Count <= anIndex then exit;
+  var BTDate := StrToFloatDef(trim(FScoreList.Names[anIndex]), 0);
+  if BTDate = 0 then exit;
+  BTDate := Int(BTDate);
+  DateTimeToString(result, 'c', BTDate);
+end;
+
+
+function THighScore.BestTime_Time(anIndex: integer = 0): string;
+begin
+  result := 'N/A';
+  if FScoreList.Count <= anIndex then exit;
+  var Tics := StrToIntDef(trim(FScoreList.ValueFromIndex[anIndex]), 0);
+  if Tics = 0 then exit;
+  Tics := Tics div 1000;
+  if Tics > 999 then
+    Tics := 999;
+  result := IntToStr(Tics);
+end;
+
+
 constructor THighScore.Create;
 begin
   FScoreList := TStringList.Create;
   FScoreList.Duplicates := dupAccept;
+end;
+
+
+function THighScore.CurrDate: string;
+begin
+  var BTDate := Int(Now);
+  DateTimeToString(result, 'c', BTDate);
 end;
 
 
@@ -301,6 +346,7 @@ function THighScore.GetHighScoreFileName: string;
 begin
   result := IncludeTrailingPathDelimiter(GetEnvironmentVariable('APPDATA')); //High Score table for each users
   result := IncludeTrailingPathDelimiter(result + cptProgramDataFolder);
+  ForceDirectories(result);
   result := result + cptHighScoreFileName;
   //ex: "C:\Users\Alex\AppData\Roaming\MineSweeperD12\HighScore.txt"
 end;
@@ -311,24 +357,25 @@ begin
   GamesPlayed := 0;
   GamesWon := 0;
   LastGame := 0; //::AN 2025-04-25 -1=Loose; 0=Current; +1=Success
-  StreakCurrent := 0;
+  //StreakCurrent := 0;
   StreakWon := 0;
   StreakLoose := 0;
   //for var Idx := Low(arBestTimes) to High(arBestTimes) do
   //  arBestTimes[Idx] := '-           ---';
   FScoreList.Clear;
+  //LoadHighScore(aDiff);
 end;
 
 
-function THighScore.LoadHighScore(aDiff: integer): boolean;
+procedure THighScore.LoadHighScore(aDiff: integer);
 var SectionName: string;
 begin
   if aDiff = 0 then exit;
+  Init(aDiff);
   var FileName: string := GetHighScoreFileName;
-  result := FileExists(FileName);
   case aDiff of
-    1: SectionName := cssIntermed;
-    2: SectionName := cssAdvanced;
+    2: SectionName := cssIntermed;
+    3: SectionName := cssAdvanced;
   else SectionName := cssBeginner;
   end;
 
@@ -337,15 +384,15 @@ begin
     GamesPlayed := IniFile.ReadInteger(SectionName, 'GamesPlayed', GamesPlayed);
     GamesWon    := IniFile.ReadInteger(SectionName, 'GamesWon', GamesWon);
     LastGame    := IniFile.ReadInteger(SectionName, 'LastGame', LastGame);
-    StreakCurrent := IniFile.ReadInteger(SectionName, 'StreakCurrent', StreakCurrent);
+    //StreakCurrent := IniFile.ReadInteger(SectionName, 'StreakCurrent', StreakCurrent);
     StreakWon     := IniFile.ReadInteger(SectionName, 'StreakWon', StreakWon);
     StreakLoose   := IniFile.ReadInteger(SectionName, 'StreakLoose', StreakLoose);
 
     if IniFile.SectionExists(SectionName + cssBestTimes) then
     begin
       IniFile.ReadSectionValues(SectionName + cssBestTimes, FScoreList);
-      FScoreList.Sort;
-      RemoveKeys;
+      FScoreList.CustomSort(HSSort);
+      //RemoveKeys;
     end
     else
       FScoreList.Clear;
@@ -358,32 +405,47 @@ end;
 procedure THighScore.LooseGame(aDiff: integer);
 begin
   if aDiff = 0 then exit;
+  LoadHighScore(aDiff);
+  if LastGame < 0 then
+    dec(LastGame)
+  else
+    LastGame := -1;
+  if Abs(LastGame) > StreakLoose then
+    StreakLoose := Abs(LastGame);
+  inc(GamesPlayed);
+  SaveHighScore(aDiff);
 end;
 
 
-procedure THighScore.PlayedGame(aDiff: integer);
+function THighScore.Percentage: integer;
 begin
-  if aDiff = 0 then exit;
-  //cssBeginner = 'Beginner';
-  //cssIntermed = 'Intermed';
-  //cssAdvanced = 'Advanced';
+  if GamesPlayed = 0 then exit(0);
+  result := trunc((GamesWon / GamesPlayed) * 100);
 end;
 
-procedure THighScore.AddKeys;
-begin
-  if FScoreList.Count = 0 then exit;
-  FScoreList.Sort;
+//procedure THighScore.PlayedGame(aDiff: integer);
+//begin
+//  if aDiff = 0 then exit;
+//  //cssBeginner = 'Beginner';
+//  //cssIntermed = 'Intermed';
+//  //cssAdvanced = 'Advanced';
+//end;
 
-end;
+
+//procedure THighScore.AddKeys;
+//begin
+//  if FScoreList.Count = 0 then exit;
+//  FScoreList.Sort;
+//end;
 
 
-procedure THighScore.RemoveKeys;
-begin
-  if FScoreList.Count = 0 then exit;
-  FScoreList.Sort;
-  for var Idx := 0 to FScoreList.Count - 1 do
-    FScoreList[Idx] := Copy(FScoreList[Idx], cbtKeySize, Length(FScoreList[Idx]));
-end;
+//procedure THighScore.RemoveKeys;
+//begin
+//  if FScoreList.Count = 0 then exit;
+//  FScoreList.Sort;
+//  for var Idx := 0 to FScoreList.Count - 1 do
+//    FScoreList[Idx] := Copy(FScoreList[Idx], cbtKeySize + 1, Length(FScoreList[Idx]));
+//end;
 
 
 procedure THighScore.SaveHighScore(aDiff: integer);
@@ -391,8 +453,8 @@ var SectionName: string;
 begin
   if aDiff = 0 then exit;
   case aDiff of
-    1: SectionName := cssIntermed;
-    2: SectionName := cssAdvanced;
+    2: SectionName := cssIntermed;
+    3: SectionName := cssAdvanced;
   else SectionName := cssBeginner;
   end;
 
@@ -401,27 +463,44 @@ begin
     IniFile.WriteInteger(SectionName, 'GamesPlayed', GamesPlayed);
     IniFile.WriteInteger(SectionName, 'GamesWon',    GamesWon);
     IniFile.WriteInteger(SectionName, 'LastGame',    LastGame);
-    IniFile.WriteInteger(SectionName, 'StreakCurrent', StreakCurrent);
-    IniFile.WriteInteger(SectionName, 'StreakWon',     StreakWon);
-    IniFile.WriteInteger(SectionName, 'StreakLoose',   StreakLoose);
+    //IniFile.WriteInteger(SectionName, 'StreakCurrent', StreakCurrent);
+    IniFile.WriteInteger(SectionName, 'StreakWon',   StreakWon);
+    IniFile.WriteInteger(SectionName, 'StreakLoose', StreakLoose);
 
-    if FScoreList.Count = 0 then exit;
+    if FScoreList.Count = 0 then
+    begin
+      IniFile.EraseSection(SectionName + cssBestTimes);
+      exit;
+    end;
 
-    FScoreList.Sort;
     for var Idx := 0 to FScoreList.Count - 1 do
-      IniFile.WriteString(SectionName + cssBestTimes, format(cssKey, [Idx]), FScoreList[Idx]);
-
+      //IniFile.WriteString(SectionName + cssBestTimes, format(cssKey + FScoreList.Names[Idx], [Idx]), FScoreList.ValueFromIndex[Idx]);
+      IniFile.WriteString(SectionName + cssBestTimes, FScoreList.Names[Idx], FScoreList.ValueFromIndex[Idx]);
   finally
     IniFile.UpdateFile;
     FreeAndNil(IniFile);
   end;
-
 end;
 
 
 procedure THighScore.WonGame(aDiff, aTime: integer);
+var Compare: TStringListSortCompare;
 begin
   if aDiff = 0 then exit;
+  LoadHighScore(aDiff);
+  if LastGame > 0 then
+    inc(LastGame)
+  else
+    LastGame := 1;
+  if LastGame > StreakWon then
+    StreakWon := LastGame;
+  inc(GamesWon);
+  inc(GamesPlayed);
+  FScoreList.AddPair(FloatToStr(Now), IntToStr(aTime));
+  FScoreList.CustomSort(HSSort);
+  while FScoreList.Count > cbtMax do
+    FScoreList.Delete(FScoreList.Count - 1);
+  SaveHighScore(aDiff);
 end;
 
 

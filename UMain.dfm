@@ -2902,7 +2902,6 @@ object FMain: TFMain
       Category = 'ctgFile'
       Caption = 'Statistics'
       ShortCut = 115
-      Visible = False
       OnExecute = actStatisticsExecute
     end
     object actOptions: TAction

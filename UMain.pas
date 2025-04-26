@@ -65,6 +65,7 @@ type
   private
     LocalParams: TLocalParams;
     GameGrid: TGameGridClass;
+    HighScore: THighScore;
     OldCell: TPoint;
     LButton: boolean;
     RButton: boolean;
@@ -113,6 +114,8 @@ begin
   FStatistics := TFStatistics.Create(Self);
   try
     FStatistics.Position := poMainFormCenter;
+    FStatistics.lHighScore := HighScore;
+    FStatistics.UpdateStat(1);
     FStatistics.ShowModal;
   finally
     FreeAndNil(FStatistics);
@@ -183,6 +186,7 @@ end;
 procedure TFMain.FormCreate(Sender: TObject);
 begin
   GameGrid  := TGameGridClass.Create(Self);
+  HighScore := THighScore.Create;
   Caption := format(csFormCaption, [GetCurrentUser]);
   OldCell.SetLocation(-1, -1);
   LocalParams := TLocalParams.Create(True, Left, Top);
@@ -207,6 +211,7 @@ begin
   LocalParams.Left := Left;
   LocalParams.Top := Top;
   LocalParams.SaveParams;
+  FreeAndNil(HighScore);
   FreeAndNil(GameGrid);
 end;
 
@@ -425,6 +430,7 @@ begin
         end;
         if Res = mrYes then
         begin
+          HighScore.LooseGame(LocalParams.GridData.Diff);
           LocalParams.GridData := FOptions.GetGridData;
           result := true;
         end;
@@ -457,8 +463,9 @@ begin
         FreeAndNil(aForm);
         FocusMe;
       end;
+      if Res = mrNo then exit;
+      HighScore.LooseGame(LocalParams.GridData.Diff);
     end;
-    if Res = mrNo then exit;
   end;
   GameGrid.Init(LocalParams.GridData);
   PrepareForm(LocalParams.GridData);
@@ -471,11 +478,15 @@ begin
   GameGrid.PlaySound(csndLoose);
   GameGrid.RenderLoose;
   UpdateGraph;
-  var aForm: TForm := CreateMessageDialog('     Sorry, you lost this game. Better luck next time!    '#13#10#13#10 +
-      //format('Time: %d seconds', [GameGrid.FGridData.Ticks div 1000]) + #13#10 +
-      //format('Best time: %d seconds  Date: %', [0]) + #13#10 +
-      //format('Games played: %d', [0]) + #13#10 +
-      #13#10, //format('Games won: %d  Percentage: %', [0]),
+  HighScore.LooseGame(LocalParams.GridData.Diff);
+  var sStats: string := #13#10;
+  if LocalParams.GridData.Diff > 0 then
+    sStats := format('Time: %d seconds', [GameGrid.FGridData.Ticks div 1000]) + #13#10 +
+              format('Best time: %s seconds '#9' Date: %s', [HighScore.BestTime_Time, HighScore.BestTime_Date]) + #13#10 +
+              format('Games played: %d', [HighScore.GamesPlayed]) + #13#10 +
+              format('Games won: %d         '#9' Percentage: %d%%', [HighScore.GamesWon, HighScore.Percentage]) + #13#10;
+
+  var aForm: TForm := CreateMessageDialog('     Sorry, you lost this game. Better luck next time!    '#13#10#13#10 + sStats,
       mtConfirmation,
       [mbYes, mbNo], mbYes,
       [' Exit ', ' Play again ']);
@@ -503,11 +514,15 @@ begin
   GameGrid.RenderSuccess;
   UpdateGraph;
   pnlMine.Caption := '0';
-  var aForm: TForm := CreateMessageDialog('    Congratulations, you won the game!    '#13#10#13#10 +
-      //format('Time: %d seconds   Date:%s', [GameGrid.FGridData.Ticks div 1000, '-']) + #13#10 +
-      //format('Best time: %d seconds  Date: %', [0]) + #13#10 +
-      //format('Games played: %d', [0]) + #13#10 +
-      #13#10, //format('Games won: %d  Percentage: %', [0]),
+  HighScore.WonGame(LocalParams.GridData.Diff, GameGrid.FGridData.Ticks);
+  var sStats: string := #13#10;
+  if LocalParams.GridData.Diff > 0 then
+    sStats := format('Time: %d seconds      '#9' Date: %s', [GameGrid.FGridData.Ticks div 1000, HighScore.CurrDate]) + #13#10 +
+              format('Best time: %s seconds '#9' Date: %s', [HighScore.BestTime_Time, HighScore.BestTime_Date]) + #13#10 +
+              format('Games played: %d', [HighScore.GamesPlayed]) + #13#10 +
+              format('Games won: %d         '#9' Percentage: %d%%', [HighScore.GamesWon, HighScore.Percentage]) + #13#10;
+
+  var aForm: TForm := CreateMessageDialog('    Congratulations, you won the game!    '#13#10#13#10 + sStats,
       mtConfirmation,
       [mbYes, mbNo], mbYes,
       [' Exit ', ' Play again ']);

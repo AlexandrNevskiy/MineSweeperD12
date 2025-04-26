@@ -1,11 +1,12 @@
 object FStatistics: TFStatistics
   Left = 0
   Top = 0
+  ActiveControl = lbDiff
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'MinesweeperD12 Statistics - '
-  ClientHeight = 276
-  ClientWidth = 675
+  ClientHeight = 202
+  ClientWidth = 632
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
@@ -25,11 +26,13 @@ object FStatistics: TFStatistics
       'Intermediate'
       'Advanced')
     TabOrder = 0
+    OnClick = lbDiffClick
+    OnKeyPress = lbDiffKeyPress
   end
   object gbBestTimes: TGroupBox
     Left = 155
     Top = 24
-    Width = 257
+    Width = 222
     Height = 113
     Caption = ' Best Times '
     TabOrder = 1
@@ -37,7 +40,7 @@ object FStatistics: TFStatistics
       AlignWithMargins = True
       Left = 27
       Top = 20
-      Width = 225
+      Width = 190
       Height = 88
       Margins.Left = 25
       Style = lbOwnerDrawFixed
@@ -55,16 +58,15 @@ object FStatistics: TFStatistics
         '55555      2025-04-05')
       Sorted = True
       TabOrder = 0
-      ExplicitLeft = 25
-      ExplicitTop = 22
+      ExplicitWidth = 174
     end
   end
   object lbStat: TListBox
     AlignWithMargins = True
-    Left = 427
-    Top = 44
-    Width = 174
-    Height = 88
+    Left = 384
+    Top = 37
+    Width = 217
+    Height = 105
     Margins.Left = 25
     Style = lbOwnerDrawFixed
     AutoComplete = False
@@ -72,10 +74,15 @@ object FStatistics: TFStatistics
     Color = clBtnFace
     Enabled = False
     ExtendedSelect = False
-    Items.Strings = (
-      'Games played: %d'
-      'Games won: %d'
-      'Win percentage: %d%%')
     TabOrder = 2
+  end
+  object btnClose: TBitBtn
+    Left = 400
+    Top = 160
+    Width = 75
+    Height = 25
+    Caption = 'Close'
+    TabOrder = 3
+    OnClick = btnCloseClick
   end
 end

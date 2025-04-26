@@ -389,7 +389,7 @@ begin
   if result then
   begin
     FGameState := gsActive;
-    TFile.Delete(aFileName);
+    //TFile.Delete(aFileName);
   end;
 end;
 
