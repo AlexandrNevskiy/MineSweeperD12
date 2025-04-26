@@ -4,18 +4,34 @@ TODO:
 1. ●●●●● Visually close to classic (new classic) Minesweeper
 2. ●●●●● Grid, Mines, Flags, Left-Right click
 3. ●●●●● Dificulty settings to Beginner, Intermediate, Advance and Custom grid size
-4. ●◌◌◌◌ High Score table (shared for all users on computer)
-5. ◌◌◌◌◌ Personal statistics (for each users)
-6. ●●●●◌ Save game at exit
-7. ●●●●◌ Restore game at start
+4. ●●◌◌◌ High Score table 
+5. ●●◌◌◌ Personal statistics
+6. ●●●●● Save game at exit
+7. ●●●●● Restore game at start
 8. ●●●●● Alghorithm to prevent First-Click-Loose
-9. ◌◌◌◌◌ Alghorithm to prevent "multi 8" at field generation (optional)
-
+9. ●●●●● Save game window position at exit and restore at start
 10. ●●●●● Sounds 
 11. ●●●●● Sound configs
 12. ●●●●● Save/Restore settings
-13. ●◌◌◌◌ Loose condition
-14. ●◌◌◌◌ Win Condition
+13. ●●●●● Loose condition
+14. ●●●●● Win Condition
+
+---
+2025-04-25<br/>
+
+Game is fully functional (highscore - WIP)
+
+Redesigned Options:<br/>
+![437282842-e3fc55f6-0b20-4989-9612-b2e4c1a6a013](https://github.com/user-attachments/assets/5f6e4933-5404-4ec9-aa44-4adcc7e8ad14)
+
+Losse state:<br/>
+![437134424-737ca975-1db3-4075-95d1-02a90ad0320c](https://github.com/user-attachments/assets/667f977f-c076-437c-b43f-4bd608facf6f)
+
+Win state:<br/>
+![437274994-11c1d75a-8e98-4f18-8962-997965865c04](https://github.com/user-attachments/assets/bd39d148-7cd3-4e3f-80e9-d2bd89849375) 
+
+Win state without flags:<br/>
+![437276020-d102529f-4d76-4a3f-8357-ce0cf4068b5b](https://github.com/user-attachments/assets/3c726ed4-a1b7-4bdd-b8a9-f8a77685d9fb)
 
 ---
 2025-04-23
