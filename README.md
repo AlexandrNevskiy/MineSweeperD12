@@ -17,6 +17,7 @@ TODO:
 14. ●●●●● Win Condition
 15. ●●●●◌ Final polishing and testing
 
+👇
 <details><summary>Behind the scenes</summary>
 
 Gradient
@@ -49,10 +50,8 @@ For this place, the horizontal and vertical offset value is calculated and the e
 
 ![image](https://github.com/user-attachments/assets/54a06b1a-37ee-49dc-8705-9f129ced313b)
 
-
-
-
 </details> 
+☝️
 
 
 ---
