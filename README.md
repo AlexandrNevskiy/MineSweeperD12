@@ -1,4 +1,6 @@
 
+# Game is ready.
+
 TODO:
 
 1. ●●●●● Visually close to classic (new classic) Minesweeper
