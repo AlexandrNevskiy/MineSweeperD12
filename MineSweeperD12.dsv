@@ -10,12 +10,12 @@ EditViewName=D:\Projects\MineSweeper\UOptions.pas
 
 [ClosedView_RDpcUHJvamVjdHNcTWluZVN3ZWVwZXJcVVV0aWxpdHkucGFz]
 Module=D:\Projects\MineSweeper\UUtility.pas
-CursorX=17
-CursorY=319
-TopLine=291
+CursorX=1
+CursorY=199
+TopLine=209
 LeftCol=1
 Elisions=
-Bookmarks={5,478,101}
+Bookmarks={5,450,1}
 EditViewName=D:\Projects\MineSweeper\UUtility.pas
 
 [ClosedView_RDpcUHJvamVjdHNcTWluZVN3ZWVwZXJcVU9wdGlvbnMuZGZt]
@@ -30,9 +30,9 @@ EditViewName=D:\Projects\MineSweeper\UOptions.dfm
 
 [ClosedView_RDpcUHJvamVjdHNcTWluZVN3ZWVwZXJcVU1haW4ucGFz]
 Module=D:\Projects\MineSweeper\UMain.pas
-CursorX=31
-CursorY=118
-TopLine=112
+CursorX=1
+CursorY=98
+TopLine=78
 LeftCol=1
 Elisions=
 Bookmarks=
@@ -51,7 +51,7 @@ EditViewName=D:\Projects\MineSweeper\UHighScore.pas
 [ClosedView_RDpcUHJvamVjdHNcTWluZVN3ZWVwZXJcTWluZVN3ZWVwZXJEMTIuZHBy]
 Module=D:\Projects\MineSweeper\MineSweeperD12.dpr
 CursorX=5
-CursorY=29
+CursorY=30
 TopLine=1
 LeftCol=1
 Elisions=
@@ -777,4 +777,14 @@ LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=d:\program files (x86)\embarcadero\studio\23.0\source\rtl\common\System.Classes.pas
+
+[ClosedView_RDpcUHJvamVjdHNcTWluZVN3ZWVwZXJcVUFib3V0LnBhcw==]
+Module=D:\Projects\MineSweeper\UAbout.pas
+CursorX=41
+CursorY=36
+TopLine=28
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=D:\Projects\MineSweeper\UAbout.pas
 

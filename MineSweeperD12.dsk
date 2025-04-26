@@ -1,63 +1,59 @@
 ﻿[Closed Files]
-File_0=TSourceModule,'d:\program files (x86)\embarcadero\studio\23.0\source\rtl\common\System.Classes.pas',0,1,10338,1,10355,0,0,,
-File_1=TSourceModule,'D:\Projects\MineSweeper\UMain.pas',0,1,235,19,285,0,0,,
-File_2=TSourceModule,'d:\program files (x86)\embarcadero\studio\23.0\SOURCE\VCL\Vcl.Controls.pas',0,1,209,1,226,0,0,,
-File_3=TSourceModule,'d:\program files (x86)\embarcadero\studio\23.0\SOURCE\VCL\Vcl.Dialogs.pas',0,1,6235,1,6252,0,0,,
-File_4=TSourceModule,'d:\program files (x86)\embarcadero\studio\23.0\source\rtl\common\System.ZLib.pas',0,1,2929,32,2941,0,0,{{133,0},{2042,32},{'zlib.h translation'}},
-File_5=TSourceModule,'d:\program files (x86)\embarcadero\studio\23.0\SOURCE\RTL\SYS\System.pas',0,1,26363,1,26380,0,0,,
-File_6=TSourceModule,'d:\program files (x86)\embarcadero\studio\23.0\SOURCE\VCL\Vcl.Forms.pas',0,1,5449,1,5466,0,0,{{2051,4},{2067,15},{'TScrollWindow'}}{{2161,4},{2265,15},{'TMainMenuBarStyleHook'}},
-File_7=TSourceModule,'d:\program files (x86)\embarcadero\studio\23.0\source\rtl\common\System.UITypes.pas',0,1,93,34,110,0,0,,
-File_8=TSourceModule,'d:\program files (x86)\embarcadero\studio\23.0\SOURCE\RTL\SYS\GETMEM.INC',0,1,2986,1,3006,0,0,,
-File_9=TSourceModule,'D:\Projects\MineSweeper\UMain.dfm',0,1,1,1,1,0,0,,
-File_10=TSourceModule,'d:\program files (x86)\embarcadero\studio\23.0\source\rtl\win\Winapi.Windows.pas',0,1,40457,67,40475,0,0,,
-File_11=TSourceModule,'d:\program files (x86)\embarcadero\studio\23.0\SOURCE\VCL\Vcl.Imaging.pngimage.pas',0,1,4454,1,4472,0,0,,
-File_12=TSourceModule,'d:\program files (x86)\embarcadero\studio\23.0\SOURCE\VCL\Vcl.Graphics.pas',0,1,1,18,10,0,0,,
-File_13=TSourceModule,'d:\program files (x86)\embarcadero\studio\23.0\SOURCE\VCL\Vcl.ExtCtrls.pas',0,1,313,1,322,0,0,,
-File_14=TSourceModule,'d:\program files (x86)\embarcadero\studio\23.0\SOURCE\RTL\SYS\System.SysUtils.pas',0,1,28319,10,28348,0,0,,
+File_0=TSourceModule,'d:\program files (x86)\embarcadero\studio\23.0\source\rtl\common\System.Classes.pas',0,1,9830,1,9847,0,0,,
+File_1=TSourceModule,'d:\program files (x86)\embarcadero\studio\23.0\SOURCE\RTL\SYS\System.SysUtils.pas',0,1,12805,1,12822,0,0,,
+File_2=TSourceModule,'d:\program files (x86)\embarcadero\studio\23.0\SOURCE\RTL\SYS\System.pas',0,1,1337,21,1349,0,0,,
+File_3=TSourceModule,'d:\program files (x86)\embarcadero\studio\23.0\SOURCE\RTL\SYS\System.Types.pas',0,1,72,10,89,0,0,,
+File_4=TSourceModule,'d:\program files (x86)\embarcadero\studio\23.0\source\rtl\win\Winapi.Windows.pas',0,1,42693,1,42710,0,0,,
+File_5=TSourceModule,'d:\program files (x86)\embarcadero\studio\23.0\SOURCE\VCL\Vcl.Forms.pas',0,1,9287,1,9304,0,0,{{2051,4},{2067,15},{'TScrollWindow'}}{{2161,4},{2265,15},{'TMainMenuBarStyleHook'}},
+File_6=TSourceModule,'d:\program files (x86)\embarcadero\studio\23.0\SOURCE\VCL\Vcl.Controls.pas',0,1,7682,1,7699,0,0,,
+File_7=TSourceModule,'D:\Projects\MineSweeper\UDebug.pas',0,1,1,3,42,0,0,,
+File_8=TSourceModule,'D:\Projects\MineSweeper\MineSweeperD12Resource.rc',0,1,24,33,23,0,0,,
+File_9=TSourceModule,'d:\program files (x86)\embarcadero\studio\23.0\source\rtl\win\Winapi.MMSystem.pas',0,1,4549,1,4566,0,0,,
+File_10=TSourceModule,'d:\program files (x86)\embarcadero\studio\23.0\SOURCE\VCL\Vcl.Dialogs.pas',0,1,6235,1,6252,0,0,,
+File_11=TSourceModule,'d:\program files (x86)\embarcadero\studio\23.0\source\rtl\common\System.ZLib.pas',0,1,2929,32,2941,0,0,{{133,0}
+File_12=TSourceModule,'d:\program files (x86)\embarcadero\studio\23.0\source\rtl\common\System.UITypes.pas',0,1,93,34,110,0,0,,
+File_13=TSourceModule,'d:\program files (x86)\embarcadero\studio\23.0\SOURCE\RTL\SYS\GETMEM.INC',0,1,2986,1,3006,0,0,,
+File_14=TSourceModule,'D:\Projects\MineSweeper\UMain.dfm',0,1,1,1,1,0,0,,
 
 [Modules]
-Module0=D:\Projects\MineSweeper\USound.pas
-Module1=D:\Projects\MineSweeper\UGameGrid.pas
-Module2=D:\Projects\MineSweeper\MineSweeperD12Resource.rc
-Module3=D:\Projects\MineSweeper\URenderGrid.pas
-Module4=D:\Projects\MineSweeper\UUtility.pas
-Module5=d:\program files (x86)\embarcadero\studio\23.0\source\rtl\win\Winapi.MMSystem.pas
+Module0=D:\Projects\MineSweeper\UUtility.pas
+Module1=D:\Projects\MineSweeper\UStatistics.pas
+Module2=D:\Projects\MineSweeper\UMain.pas
+Module3=D:\Projects\MineSweeper\UGameGrid.pas
+Module4=D:\Projects\MineSweeper\URenderGrid.pas
+Module5=D:\Projects\MineSweeper\UOptions.pas
 Module6=D:\Projects\MineSweeper\MineSweeperD12.dproj
-Module7=D:\Projects\MineSweeper\UDebug.pas
-Module8=D:\Projects\MineSweeper\UOptions.pas
-Count=9
+Module7=D:\Projects\MineSweeper\USound.pas
+Count=8
 EditWindowCount=1
 
-[D:\Projects\MineSweeper\USound.pas]
+[D:\Projects\MineSweeper\UUtility.pas]
+ModuleType=TSourceModule
+
+[D:\Projects\MineSweeper\UStatistics.pas]
+ModuleType=TSourceModule
+
+[D:\Projects\MineSweeper\UMain.pas]
 ModuleType=TSourceModule
 
 [D:\Projects\MineSweeper\UGameGrid.pas]
 ModuleType=TSourceModule
 
-[D:\Projects\MineSweeper\MineSweeperD12Resource.rc]
-ModuleType=TSourceModule
-
 [D:\Projects\MineSweeper\URenderGrid.pas]
-ModuleType=TSourceModule
-
-[D:\Projects\MineSweeper\UUtility.pas]
-ModuleType=TSourceModule
-
-[d:\program files (x86)\embarcadero\studio\23.0\source\rtl\win\Winapi.MMSystem.pas]
-ModuleType=TSourceModule
-
-[D:\Projects\MineSweeper\MineSweeperD12.dproj]
-ModuleType=TBaseProject
-
-[D:\Projects\MineSweeper\UDebug.pas]
 ModuleType=TSourceModule
 
 [D:\Projects\MineSweeper\UOptions.pas]
 ModuleType=TSourceModule
 
+[D:\Projects\MineSweeper\MineSweeperD12.dproj]
+ModuleType=TBaseProject
+
+[D:\Projects\MineSweeper\USound.pas]
+ModuleType=TSourceModule
+
 [EditWindow0]
-ViewCount=9
-CurrentEditView=D:\Projects\MineSweeper\USound.pas
+ViewCount=8
+CurrentEditView=D:\Projects\MineSweeper\UUtility.pas
 View0=0
 View1=1
 View2=2
@@ -66,7 +62,6 @@ View4=4
 View5=5
 View6=6
 View7=7
-View8=8
 PercentageSizes=1
 Create=1
 Visible=1
@@ -87,15 +82,15 @@ StayOnTop=0
 DockedToMainForm=1
 BorlandEditorCodeExplorer=BorlandEditorCodeExplorer@EditWindow0
 TopPanelSize=0
-LeftPanelSize=1512
+LeftPanelSize=1516
 LeftPanelClients=PropertyInspector,DockSite3
-LeftPanelData=00000800010100000000CB0F00000000000001E80500000000000001000000005A0E000009000000446F636B53697465330100000000141C00001100000050726F7065727479496E73706563746F72FFFFFFFF
-RightPanelSize=1547
+LeftPanelData=00000800010100000000AC0F00000000000001EC0500000000000001000000005A0E000009000000446F636B53697465330100000000DC1B00001100000050726F7065727479496E73706563746F72FFFFFFFF
+RightPanelSize=1598
 RightPanelClients=DockSite2,DockSite4
-RightPanelData=00000800010100000000CB0F000000000000010B0600000000000001000000004111000009000000446F636B53697465320100000000141C000009000000446F636B5369746534FFFFFFFF
-BottomPanelSize=1646
+RightPanelData=00000800010100000000AC0F000000000000013E0600000000000001000000004111000009000000446F636B53697465320100000000DC1B000009000000446F636B5369746534FFFFFFFF
+BottomPanelSize=1701
 BottomPanelClients=MessageView,DockSite1
-BottomPanelData=000008000102000000000345000000000000026E0600000000000001000000008122000009000000446F636B53697465310100000000034500000F0000004D65737361676556696577466F726DFFFFFFFF
+BottomPanelData=00000800010200000000034500000000000002A5060000000000000100000000812200000F0000004D65737361676556696577466F726D01000000000345000009000000446F636B5369746531FFFFFFFF
 BottomMiddlePanelSize=0
 BottomMiddlePanelClients=DockSite0,GraphDrawingModel
 BottomMiddelPanelData=0000080001020200000009000000446F636B536974653010000000477261706844726177696E67566965779F1D00000000000002F206000000000000FFFFFFFF
@@ -104,7 +99,7 @@ BottomMiddelPanelData=0000080001020200000009000000446F636B5369746530100000004772
 CustomEditViewType=TEditView
 Module=D:\Projects\MineSweeper\MineSweeperD12.dpr
 CursorX=5
-CursorY=33
+CursorY=29
 TopLine=1
 LeftCol=1
 Elisions=
@@ -113,91 +108,80 @@ EditViewName=D:\Projects\MineSweeper\MineSweeperD12.dpr
 
 [View1]
 CustomEditViewType=TEditView
-Module=D:\Projects\MineSweeper\UGameGrid.pas
-CursorX=3
-CursorY=282
-TopLine=234
+Module=D:\Projects\MineSweeper\UMain.pas
+CursorX=31
+CursorY=118
+TopLine=112
 LeftCol=1
 Elisions=
-Bookmarks={5,387,59}
-EditViewName=D:\Projects\MineSweeper\UGameGrid.pas
+Bookmarks=
+EditViewName=D:\Projects\MineSweeper\UMain.pas
 
 [View2]
 CustomEditViewType=TEditView
-Module=D:\Projects\MineSweeper\MineSweeperD12Resource.rc
-CursorX=33
-CursorY=23
-TopLine=1
+Module=D:\Projects\MineSweeper\UGameGrid.pas
+CursorX=7
+CursorY=392
+TopLine=373
 LeftCol=1
 Elisions=
-Bookmarks=
-EditViewName=D:\Projects\MineSweeper\MineSweeperD12Resource.rc
+Bookmarks={5,95,1}
+EditViewName=D:\Projects\MineSweeper\UGameGrid.pas
 
 [View3]
 CustomEditViewType=TEditView
-Module=D:\Projects\MineSweeper\UDebug.pas
-CursorX=3
-CursorY=42
-TopLine=29
+Module=D:\Projects\MineSweeper\UUtility.pas
+CursorX=1
+CursorY=415
+TopLine=390
 LeftCol=1
 Elisions=
-Bookmarks=
-EditViewName=D:\Projects\MineSweeper\UDebug.pas
+Bookmarks={5,477,101}
+EditViewName=D:\Projects\MineSweeper\UUtility.pas
 
 [View4]
 CustomEditViewType=TEditView
-Module=D:\Projects\MineSweeper\UUtility.pas
-CursorX=13
-CursorY=161
-TopLine=144
-LeftCol=1
-Elisions=
-Bookmarks=
-EditViewName=D:\Projects\MineSweeper\UUtility.pas
-
-[View5]
-CustomEditViewType=TEditView
 Module=D:\Projects\MineSweeper\URenderGrid.pas
-CursorX=22
-CursorY=188
-TopLine=177
+CursorX=1
+CursorY=35
+TopLine=14
 LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=D:\Projects\MineSweeper\URenderGrid.pas
 
-[View6]
+[View5]
 CustomEditViewType=TEditView
 Module=D:\Projects\MineSweeper\USound.pas
-CursorX=31
-CursorY=79
-TopLine=52
+CursorX=1
+CursorY=66
+TopLine=40
 LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=D:\Projects\MineSweeper\USound.pas
 
-[View7]
-CustomEditViewType=TEditView
-Module=d:\program files (x86)\embarcadero\studio\23.0\source\rtl\win\Winapi.MMSystem.pas
-CursorX=1
-CursorY=4566
-TopLine=4549
-LeftCol=1
-Elisions=
-Bookmarks=
-EditViewName=d:\program files (x86)\embarcadero\studio\23.0\source\rtl\win\Winapi.MMSystem.pas
-
-[View8]
+[View6]
 CustomEditViewType=TEditView
 Module=D:\Projects\MineSweeper\UOptions.pas
-CursorX=64
-CursorY=214
-TopLine=204
+CursorX=12
+CursorY=61
+TopLine=133
 LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=D:\Projects\MineSweeper\UOptions.pas
+
+[View7]
+CustomEditViewType=TEditView
+Module=D:\Projects\MineSweeper\UStatistics.pas
+CursorX=35
+CursorY=59
+TopLine=57
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=Borland.FormDesignerView
 
 [Watches]
 Count=3
@@ -263,11 +247,11 @@ Docked=1
 State=0
 Left=0
 Top=0
-Width=1547
+Width=1598
 Height=4109
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=1547
+ClientWidth=1598
 ClientHeight=4109
 TBDockHeight=5898
 LRDockWidth=2348
@@ -280,15 +264,15 @@ Create=1
 Visible=1
 Docked=1
 State=0
-Left=1272
+Left=0
 Top=28
-Width=4969
-Height=1501
+Width=4938
+Height=1559
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=4969
-ClientHeight=1501
-TBDockHeight=1501
+ClientWidth=4938
+ClientHeight=1559
+TBDockHeight=1559
 LRDockWidth=2770
 Dockable=1
 StayOnTop=0
@@ -301,12 +285,12 @@ Docked=1
 State=0
 Left=0
 Top=0
-Width=1547
-Height=2665
+Width=1598
+Height=2608
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=1547
-ClientHeight=2665
+ClientWidth=1598
+ClientHeight=2608
 TBDockHeight=7155
 LRDockWidth=1996
 Dockable=1
@@ -320,17 +304,22 @@ Docked=1
 State=0
 Left=0
 Top=557
-Width=1512
-Height=3434
+Width=1516
+Height=3376
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=1512
-ClientHeight=3434
+ClientWidth=1516
+ClientHeight=3376
 TBDockHeight=8994
-LRDockWidth=1512
+LRDockWidth=1516
 Dockable=1
 StayOnTop=0
-SplitPos=152
+SplitPos=169
+
+[PropInspDesignerSelection]
+ArrangeBy=Name
+SelectedItem=Top,OnExecute
+ExpandedItems=Anchors=0,BevelEdges=0,Constraints=0,Font=0,LiveBindings=0,"LiveBindings Designer=0",Margins=1,StyleElements=0,Touch=0,BorderIcons=1,CustomTitleBar=0,GlassFrame=0,HorzScrollBar=0,Menu=0,HeaderFont=0,Padding=0,VertScrollBar=0,ActiveControl=0
 
 [frmDesignPreview]
 PercentageSizes=1
@@ -499,12 +488,12 @@ Docked=1
 State=0
 Left=0
 Top=0
-Width=4938
-Height=1300
+Width=4969
+Height=1358
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=4938
-ClientHeight=1300
+ClientWidth=4969
+ClientHeight=1358
 TBDockHeight=2062
 LRDockWidth=3484
 Dockable=1
@@ -666,11 +655,11 @@ Docked=1
 State=0
 Left=0
 Top=0
-Width=1512
+Width=1516
 Height=3542
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=1512
+ClientWidth=1516
 ClientHeight=3542
 TBDockHeight=3678
 LRDockWidth=1895
@@ -750,15 +739,15 @@ Create=1
 Visible=1
 Docked=1
 State=0
-Left=0
+Left=1272
 Top=28
-Width=4938
-Height=1501
+Width=4969
+Height=1559
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=4938
-ClientHeight=1501
-TBDockHeight=1501
+ClientWidth=4969
+ClientHeight=1559
+TBDockHeight=1559
 LRDockWidth=3824
 Dockable=1
 StayOnTop=0
@@ -776,14 +765,14 @@ Docked=1
 State=0
 Left=0
 Top=28
-Width=1547
+Width=1598
 Height=4310
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=1547
+ClientWidth=1598
 ClientHeight=4310
 TBDockHeight=8994
-LRDockWidth=1547
+LRDockWidth=1598
 Dockable=1
 StayOnTop=0
 TabPosition=1
@@ -800,14 +789,14 @@ Docked=1
 State=0
 Left=0
 Top=28
-Width=1512
+Width=1516
 Height=3542
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=1512
+ClientWidth=1516
 ClientHeight=3542
 TBDockHeight=8994
-LRDockWidth=1512
+LRDockWidth=1516
 Dockable=1
 StayOnTop=0
 TabPosition=1
@@ -824,14 +813,14 @@ Docked=1
 State=0
 Left=0
 Top=664
-Width=1547
-Height=2665
+Width=1598
+Height=2608
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=1547
-ClientHeight=2665
+ClientWidth=1598
+ClientHeight=2608
 TBDockHeight=8994
-LRDockWidth=1547
+LRDockWidth=1598
 Dockable=1
 StayOnTop=0
 TabPosition=1

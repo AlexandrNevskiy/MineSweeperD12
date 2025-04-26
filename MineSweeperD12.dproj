@@ -144,6 +144,10 @@
             <Form>FStatistics</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="UAbout.pas">
+            <Form>FAbout</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <RcItem Include="Img\Mine.png">
             <ResourceType>RCDATA</ResourceType>
             <ResourceId>res_img11</ResourceId>

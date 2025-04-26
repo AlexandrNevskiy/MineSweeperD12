@@ -2865,10 +2865,13 @@ object FMain: TFMain
       object Options1: TMenuItem
         Action = actOptions
       end
-      object Visual1: TMenuItem
-        Action = actVisual
-      end
       object Divider2: TMenuItem
+        Caption = '-'
+      end
+      object N2: TMenuItem
+        Action = actAbout
+      end
+      object N1: TMenuItem
         Caption = '-'
       end
       object Exit1: TMenuItem
@@ -2926,8 +2929,9 @@ object FMain: TFMain
       ShortCut = 112
     end
     object actAbout: TAction
-      Category = 'ctgHelp'
+      Category = 'ctgFile'
       Caption = 'About'
+      OnExecute = actAboutExecute
     end
   end
   object Timer: TTimer

@@ -21,7 +21,6 @@ type
     Divider1: TMenuItem;
     Statistics1: TMenuItem;
     Options1: TMenuItem;
-    Visual1: TMenuItem;
     Divider2: TMenuItem;
     Exit1: TMenuItem;
     Help0: TMenuItem;
@@ -43,6 +42,8 @@ type
     pnlMine: TPanel;
     Timer: TTimer;
     imgGrid: TImage;
+    N1: TMenuItem;
+    N2: TMenuItem;
     procedure actOptionsExecute(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -62,6 +63,7 @@ type
     procedure actStatisticsExecute(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure actExitExecute(Sender: TObject);
+    procedure actAboutExecute(Sender: TObject);
   private
     LocalParams: TLocalParams;
     GameGrid: TGameGridClass;
@@ -87,14 +89,26 @@ var
 
 implementation
 
-uses Math, UOptions, UStatistics;
+uses Math, UOptions, UStatistics, UAbout;
 
 {$R *.dfm}
+
+procedure TFMain.actAboutExecute(Sender: TObject);
+begin
+  var FAbout := TFAbout.Create(Self);
+  try
+    FAbout.ShowModal;
+  finally
+    FreeAndNil(FAbout);
+  end;
+end;
+
 
 procedure TFMain.actExitExecute(Sender: TObject);
 begin
   Close;
 end;
+
 
 procedure TFMain.actNewGameExecute(Sender: TObject);
 begin

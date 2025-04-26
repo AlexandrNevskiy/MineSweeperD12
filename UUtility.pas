@@ -384,7 +384,6 @@ begin
     GamesPlayed := IniFile.ReadInteger(SectionName, 'GamesPlayed', GamesPlayed);
     GamesWon    := IniFile.ReadInteger(SectionName, 'GamesWon', GamesWon);
     LastGame    := IniFile.ReadInteger(SectionName, 'LastGame', LastGame);
-    //StreakCurrent := IniFile.ReadInteger(SectionName, 'StreakCurrent', StreakCurrent);
     StreakWon     := IniFile.ReadInteger(SectionName, 'StreakWon', StreakWon);
     StreakLoose   := IniFile.ReadInteger(SectionName, 'StreakLoose', StreakLoose);
 
@@ -392,7 +391,6 @@ begin
     begin
       IniFile.ReadSectionValues(SectionName + cssBestTimes, FScoreList);
       FScoreList.CustomSort(HSSort);
-      //RemoveKeys;
     end
     else
       FScoreList.Clear;
@@ -423,30 +421,6 @@ begin
   result := trunc((GamesWon / GamesPlayed) * 100);
 end;
 
-//procedure THighScore.PlayedGame(aDiff: integer);
-//begin
-//  if aDiff = 0 then exit;
-//  //cssBeginner = 'Beginner';
-//  //cssIntermed = 'Intermed';
-//  //cssAdvanced = 'Advanced';
-//end;
-
-
-//procedure THighScore.AddKeys;
-//begin
-//  if FScoreList.Count = 0 then exit;
-//  FScoreList.Sort;
-//end;
-
-
-//procedure THighScore.RemoveKeys;
-//begin
-//  if FScoreList.Count = 0 then exit;
-//  FScoreList.Sort;
-//  for var Idx := 0 to FScoreList.Count - 1 do
-//    FScoreList[Idx] := Copy(FScoreList[Idx], cbtKeySize + 1, Length(FScoreList[Idx]));
-//end;
-
 
 procedure THighScore.SaveHighScore(aDiff: integer);
 var SectionName: string;
@@ -463,7 +437,6 @@ begin
     IniFile.WriteInteger(SectionName, 'GamesPlayed', GamesPlayed);
     IniFile.WriteInteger(SectionName, 'GamesWon',    GamesWon);
     IniFile.WriteInteger(SectionName, 'LastGame',    LastGame);
-    //IniFile.WriteInteger(SectionName, 'StreakCurrent', StreakCurrent);
     IniFile.WriteInteger(SectionName, 'StreakWon',   StreakWon);
     IniFile.WriteInteger(SectionName, 'StreakLoose', StreakLoose);
 
@@ -474,7 +447,6 @@ begin
     end;
 
     for var Idx := 0 to FScoreList.Count - 1 do
-      //IniFile.WriteString(SectionName + cssBestTimes, format(cssKey + FScoreList.Names[Idx], [Idx]), FScoreList.ValueFromIndex[Idx]);
       IniFile.WriteString(SectionName + cssBestTimes, FScoreList.Names[Idx], FScoreList.ValueFromIndex[Idx]);
   finally
     IniFile.UpdateFile;
@@ -658,7 +630,7 @@ var aSteps, a, b, c: integer;
     x, y: integer;
 begin
   SetLength(FCells, aGridData.Width, aGridData.Height);
-  aSteps := aGridData.Width + aGridData.Height;
+  aSteps := aGridData.Width + aGridData.Height - 1;
 
   a := Max(0, ccSteps - aSteps);
   b := ccSteps;
