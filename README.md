@@ -4,8 +4,8 @@ TODO:
 1. ●●●●● Visually close to classic (new classic) Minesweeper
 2. ●●●●● Grid, Mines, Flags, Left-Right click
 3. ●●●●● Dificulty settings to Beginner, Intermediate, Advance and Custom grid size
-4. ●●◌◌◌ High Score table 
-5. ●●◌◌◌ Personal statistics
+4. ●●●●● High Score table 
+5. ●●●●● Personal statistics
 6. ●●●●● Save game at exit
 7. ●●●●● Restore game at start
 8. ●●●●● Alghorithm to prevent First-Click-Loose
@@ -15,6 +15,19 @@ TODO:
 12. ●●●●● Save/Restore settings
 13. ●●●●● Loose condition
 14. ●●●●● Win Condition
+15. ●◌◌◌◌ Final polishing and testing
+
+---
+2025-04-26<br/>
+
+Personal statistics and high score. Separated for difficulty (except Custom). For each user.
+(As Date format used locale short date format)
+
+![437669643-be0a59ce-5563-48a7-a81a-1f2b720fc07b](https://github.com/user-attachments/assets/208534a6-180d-4d29-827b-b112e709bbc6)
+
+![437669709-7aa53cbe-b5e4-42a7-88f2-02b75227658a](https://github.com/user-attachments/assets/46df9901-bc07-4699-b5d4-4110ae3f631f)
+
+![437669871-c1b16a05-3cd0-441f-ace9-52cd86cc0d7f](https://github.com/user-attachments/assets/71d7618f-47da-4d9d-a214-9c5d1c0a9a2b)
 
 ---
 2025-04-25<br/>
