@@ -15,7 +15,15 @@ TODO:
 12. ●●●●● Save/Restore settings
 13. ●●●●● Loose condition
 14. ●●●●● Win Condition
-15. ●◌◌◌◌ Final polishing and testing
+15. ●●●●◌ Final polishing and testing
+
+---
+2025-04-26 2<br/>
+
+About screen:
+
+![437768625-12deaf17-47af-49f1-b172-7088f0bdb6c3](https://github.com/user-attachments/assets/c3c16795-4c93-4c87-87dc-c46bf72f7b46)
+
 
 ---
 2025-04-26<br/>
