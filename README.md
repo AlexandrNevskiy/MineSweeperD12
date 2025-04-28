@@ -1,6 +1,9 @@
 
 # Game is ready.
 
+[MineSweeperD12.exe](https://github.com/AlexandrNevskiy/MineSweeperD12/blob/main/MineSweeperD12.exe)
+
+---
 TODO:
 
 1. ●●●●● Visually close to classic (new classic) Minesweeper
