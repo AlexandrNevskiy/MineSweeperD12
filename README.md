@@ -3,6 +3,8 @@
 
 [MineSweeperD12.exe](https://github.com/AlexandrNevskiy/MineSweeperD12/blob/main/MineSweeperD12.exe)
 
+[Contest](https://github.com/orgs/radprogrammer/discussions/12)
+
 ---
 TODO:
 
