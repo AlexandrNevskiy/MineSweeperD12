@@ -3,7 +3,11 @@
 
 [MineSweeperD12.exe](https://github.com/AlexandrNevskiy/MineSweeperD12/blob/main/MineSweeperD12.exe)
 
-[Contest](https://github.com/orgs/radprogrammer/discussions/12)
+[Contest](https://ideasawakened.com/post/rad-programmer-challenge-number-1-minesweeper-game-build)
+
+[Discussion](https://github.com/orgs/radprogrammer/discussions/12)
+
+
 
 ---
 TODO:
